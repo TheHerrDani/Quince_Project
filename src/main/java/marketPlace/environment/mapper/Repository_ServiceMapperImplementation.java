@@ -2,8 +2,8 @@ package marketPlace.environment.mapper;
 
 import marketPlace.repository.Product;
 import marketPlace.repository.Seller;
-import marketPlace.repositoryInterface.ProductRepository;
-import marketPlace.repositoryInterface.SellerRepository;
+import marketPlace.repository.ProductRepository;
+import marketPlace.repository.SellerRepository;
 import marketPlace.services.domain.ProductDomain;
 import marketPlace.services.domain.SellerDomain;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +12,12 @@ import org.springframework.stereotype.Component;
 import java.util.stream.Collectors;
 
 @Component
-public class Repository_ServiceMapper {
+public class Repository_ServiceMapperImplementation {
 
     @Autowired
-    ProductRepository productRepository;
+    private ProductRepository productRepository;
     @Autowired
-    SellerRepository sellerRepository;
+    private SellerRepository sellerRepository;
 
     public Product productDomainToProduct(ProductDomain productDomain) {
         Product product = productRepository.findById(productDomain.getProductId()).get();

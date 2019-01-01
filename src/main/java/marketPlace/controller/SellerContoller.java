@@ -3,7 +3,8 @@ package marketPlace.controller;
 import marketPlace.controller.model.ProductModel;
 import marketPlace.controller.model.SellerModel;
 import marketPlace.environment.mapper.Service_ControllerMapper;
-import marketPlace.servicesInterface.SellerServicesInterface;
+import marketPlace.environment.mapper.Service_ControllerMapperImplementation;
+import marketPlace.services.SellerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -14,10 +15,10 @@ import java.util.List;
 @RequestMapping(path = "/SellerDomain")
 public class SellerContoller {
     @Autowired
-    private SellerServicesInterface sellerServices;
+    private SellerService sellerServices;
 
     @Autowired
-    private Service_ControllerMapper service_controllerMapper;
+    private Service_ControllerMapper service_controllerMapperImplementation;
 
     @PostMapping(path = "/Add")
     public @ResponseBody

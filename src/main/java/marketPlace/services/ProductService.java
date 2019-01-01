@@ -1,4 +1,4 @@
-package marketPlace.servicesInterface;
+package marketPlace.services;
 
 import marketPlace.controller.model.ProductModel;
 import marketPlace.repository.Product;
@@ -7,7 +7,7 @@ import marketPlace.services.domain.ProductDomain;
 import java.util.List;
 
 
-public interface ProductServiceInterface {
+public interface ProductService {
     String saveProduct(ProductModel productModel);
 
     String deleteProduct(int productId);

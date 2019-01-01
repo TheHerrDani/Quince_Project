@@ -1,4 +1,4 @@
-package marketPlace.environment.mapperInterface;
+package marketPlace.environment.mapper;
 
 import marketPlace.repository.Product;
 import marketPlace.repository.Seller;
@@ -7,7 +7,7 @@ import marketPlace.services.domain.SellerDomain;
 import org.springframework.stereotype.Component;
 
 @Component
-public interface Repository_ServicesMapperInterface {
+public interface Repository_ServicesMapper {
 
     Product productDomainToProduct(ProductDomain productDomain);
 

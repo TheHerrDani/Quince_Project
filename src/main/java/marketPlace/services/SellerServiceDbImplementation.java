@@ -2,13 +2,12 @@ package marketPlace.services;
 
 import marketPlace.controller.model.ProductModel;
 import marketPlace.controller.model.SellerModel;
-import marketPlace.environment.mapperInterface.Repository_ServicesMapperInterface;
-import marketPlace.environment.mapperInterface.Service_ControllerMapperInterface;
+import marketPlace.environment.mapper.Repository_ServicesMapper;
+import marketPlace.environment.mapper.Service_ControllerMapper;
 import marketPlace.repository.Seller;
-import marketPlace.repositoryInterface.ProductRepository;
-import marketPlace.repositoryInterface.SellerRepository;
+import marketPlace.repository.ProductRepository;
+import marketPlace.repository.SellerRepository;
 import marketPlace.services.domain.SellerDomain;
-import marketPlace.servicesInterface.SellerServicesInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,7 @@ import java.util.stream.Collectors;
 
 @Service
 @ComponentScan(basePackages = "marketPlace.environment")
-public class SellerServices implements SellerServicesInterface {
+public class SellerServiceDbImplementation implements SellerService {
 
     @Autowired
     private ProductRepository productRepository;
@@ -29,10 +28,10 @@ public class SellerServices implements SellerServicesInterface {
     private SellerRepository sellerRepository;
 
     @Autowired
-    private Service_ControllerMapperInterface service_controllerMapper;
+    private Service_ControllerMapper service_controllerMapper;
 
     @Autowired
-    private Repository_ServicesMapperInterface repository_serviceMapper;
+    private Repository_ServicesMapper repository_serviceMapper;
 
 
     public String saveSeller(SellerModel sellerModel) {

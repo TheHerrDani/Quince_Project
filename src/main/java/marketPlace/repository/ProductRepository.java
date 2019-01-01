@@ -1,4 +1,4 @@
-package marketPlace.repositoryInterface;
+package marketPlace.repository;
 
 import org.springframework.data.repository.CrudRepository;
 import marketPlace.repository.Product;

@@ -2,7 +2,8 @@ package marketPlace.controller;
 
 import marketPlace.controller.model.ProductModel;
 import marketPlace.environment.mapper.Service_ControllerMapper;
-import marketPlace.servicesInterface.ProductServiceInterface;
+import marketPlace.environment.mapper.Service_ControllerMapperImplementation;
+import marketPlace.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -14,10 +15,10 @@ import java.util.List;
 public class ProductController {
 
     @Autowired
-    private ProductServiceInterface productService;
+    private ProductService productService;
 
     @Autowired
-    private Service_ControllerMapper service_controllerMapper;
+    private Service_ControllerMapper service_controllerMapperImplementation;
 
     @PostMapping(path = "/Add")
     public @ResponseBody

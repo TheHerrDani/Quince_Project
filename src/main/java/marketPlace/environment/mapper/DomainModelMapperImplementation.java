@@ -6,6 +6,7 @@ import marketPlace.repository.ProductRepository;
 import marketPlace.repository.SellerRepository;
 import marketPlace.services.domain.ProductDomain;
 import marketPlace.services.domain.SellerDomain;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
@@ -17,6 +18,7 @@ public class DomainModelMapperImplementation implements Domain_ModelMapper {
 
     private SellerRepository sellerRepository;
 
+    @Autowired
     public DomainModelMapperImplementation(ProductRepository productRepository, SellerRepository sellerRepository) {
         this.productRepository = productRepository;
         this.sellerRepository = sellerRepository;
@@ -24,6 +26,7 @@ public class DomainModelMapperImplementation implements Domain_ModelMapper {
 
     public ProductModel productDomainToProductModel(ProductDomain productDomain) {
         ProductModel productModel = new ProductModel();
+        productModel.setProductId(productDomain.getProductId());
         productModel.setCategory(productDomain.getCategory());
         productModel.setDescription(productDomain.getDescription());
         productModel.setName(productDomain.getName());
@@ -46,6 +49,7 @@ public class DomainModelMapperImplementation implements Domain_ModelMapper {
 
     public SellerModel sellerDomainToSellerModel(SellerDomain sellerDomain) {
         SellerModel sellerModel = new SellerModel();
+        sellerModel.setSellerId(sellerDomain.getSellerId());
         sellerModel.setFirstName(sellerDomain.getFirstName());
         sellerModel.setLastName(sellerDomain.getLastName());
         sellerModel.setEmail(sellerDomain.getEmail());
@@ -61,4 +65,6 @@ public class DomainModelMapperImplementation implements Domain_ModelMapper {
         sellerDomain.addManyProducts(sellerModel.getProducts().stream().map(this::productModelToProductDomain).collect(Collectors.toList()));
         return sellerDomain;
     }
+
+
 }

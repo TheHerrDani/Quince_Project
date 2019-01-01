@@ -1,6 +1,7 @@
-package marketPlace.repository;
+package marketPlace.repository.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import marketPlace.repository.ProductCategory;
 
 import javax.persistence.*;
 

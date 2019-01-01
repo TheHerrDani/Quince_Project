@@ -1,6 +1,5 @@
 package marketPlace.controller.model;
 
-import marketPlace.repository.Product;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -48,7 +47,7 @@ public class SellerModel {
     }
 
     public void addManyProducts(List<ProductModel> products) {
-        products.addAll(products);
+        this.products.addAll(products);
     }
 
     public String getEmail() {

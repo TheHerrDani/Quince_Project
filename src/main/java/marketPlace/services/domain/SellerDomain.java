@@ -1,6 +1,5 @@
 package marketPlace.services.domain;
 
-import marketPlace.repository.Product;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -48,7 +47,7 @@ public class SellerDomain {
     }
 
     public void addManyProducts(List<ProductDomain> products) {
-       products.addAll(products);
+       this.products.addAll(products);
     }
 
     public String getEmail() {

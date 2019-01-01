@@ -2,10 +2,8 @@ package marketPlace.services;
 
 import marketPlace.controller.model.ProductModel;
 import marketPlace.controller.model.SellerModel;
-import marketPlace.repository.Seller;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface SellerService {
     String saveSeller(SellerModel sellerModel);

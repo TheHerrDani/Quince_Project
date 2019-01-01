@@ -1,4 +1,4 @@
-package marketPlace.repository;
+package marketPlace.repository.Entity;
 
 
 import javax.persistence.*;

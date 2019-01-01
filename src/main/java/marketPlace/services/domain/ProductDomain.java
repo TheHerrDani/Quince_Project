@@ -1,7 +1,7 @@
 package marketPlace.services.domain;
 
 import marketPlace.repository.ProductCategory;
-import marketPlace.repository.Seller;
+import marketPlace.repository.Entity.Seller;
 import org.springframework.stereotype.Component;
 
 @Component

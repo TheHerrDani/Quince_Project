@@ -1,7 +1,7 @@
 package marketPlace.environment.mapper;
 
-import marketPlace.repository.Product;
-import marketPlace.repository.Seller;
+import marketPlace.repository.Entity.Product;
+import marketPlace.repository.Entity.Seller;
 import marketPlace.repository.ProductRepository;
 import marketPlace.repository.SellerRepository;
 import marketPlace.services.domain.ProductDomain;
@@ -12,13 +12,14 @@ import org.springframework.stereotype.Component;
 import java.util.stream.Collectors;
 
 @Component
-public class Repository_ServiceMapperImplementation {
-
+public class DomainEntityMapperImplementation implements Domain_EntityMapper {
 
     private ProductRepository productRepository;
+
     private SellerRepository sellerRepository;
 
-    public Repository_ServiceMapperImplementation(ProductRepository productRepository, SellerRepository sellerRepository) {
+    @Autowired
+    public DomainEntityMapperImplementation(ProductRepository productRepository, SellerRepository sellerRepository) {
         this.productRepository = productRepository;
         this.sellerRepository = sellerRepository;
     }
@@ -47,6 +48,7 @@ public class Repository_ServiceMapperImplementation {
 
     public ProductDomain productToProductDomain(Product product) {
         ProductDomain productDomain = new ProductDomain();
+        productDomain.setProductId(product.getProductId());
         productDomain.setCategory(product.getCategory());
         productDomain.setDescription(product.getDescription());
         productDomain.setName(product.getName());
@@ -76,6 +78,7 @@ public class Repository_ServiceMapperImplementation {
 
     public SellerDomain sellerToSellerDomain(Seller seller) {
         SellerDomain sellerDomain = new SellerDomain();
+        sellerDomain.setSellerId(seller.getSellerId());
         sellerDomain.setFirstName(seller.getFirstName());
         sellerDomain.setLastName(seller.getLastName());
         sellerDomain.setEmail(seller.getEmail());

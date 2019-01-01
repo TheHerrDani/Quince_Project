@@ -1,7 +1,7 @@
 package marketPlace.environment.mapper;
 
-import marketPlace.repository.Product;
-import marketPlace.repository.Seller;
+import marketPlace.repository.Entity.Product;
+import marketPlace.repository.Entity.Seller;
 import marketPlace.services.domain.ProductDomain;
 import marketPlace.services.domain.SellerDomain;
 import org.springframework.stereotype.Component;

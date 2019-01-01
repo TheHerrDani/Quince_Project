@@ -6,18 +6,21 @@ import marketPlace.repository.ProductRepository;
 import marketPlace.repository.SellerRepository;
 import marketPlace.services.domain.ProductDomain;
 import marketPlace.services.domain.SellerDomain;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
 
 @Service
-public class Service_ControllerMapperImplementation implements Service_ControllerMapper {
-    @Autowired
+public class DomainModelMapperImplementation implements Domain_ModelMapper {
+
     private ProductRepository productRepository;
 
-    @Autowired
     private SellerRepository sellerRepository;
+
+    public DomainModelMapperImplementation(ProductRepository productRepository, SellerRepository sellerRepository) {
+        this.productRepository = productRepository;
+        this.sellerRepository = sellerRepository;
+    }
 
     public ProductModel productDomainToProductModel(ProductDomain productDomain) {
         ProductModel productModel = new ProductModel();

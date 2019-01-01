@@ -7,7 +7,7 @@ import marketPlace.services.domain.SellerDomain;
 import org.springframework.stereotype.Component;
 
 @Component
-public interface Repository_ServicesMapper {
+public interface Domain_EntityMapper {
 
     Product productDomainToProduct(ProductDomain productDomain);
 

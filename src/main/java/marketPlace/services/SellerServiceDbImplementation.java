@@ -2,8 +2,8 @@ package marketPlace.services;
 
 import marketPlace.controller.model.ProductModel;
 import marketPlace.controller.model.SellerModel;
-import marketPlace.environment.mapper.Repository_ServicesMapper;
-import marketPlace.environment.mapper.Service_ControllerMapper;
+import marketPlace.environment.mapper.Domain_EntityMapper;
+import marketPlace.environment.mapper.Domain_ModelMapper;
 import marketPlace.repository.Seller;
 import marketPlace.repository.ProductRepository;
 import marketPlace.repository.SellerRepository;
@@ -28,10 +28,10 @@ public class SellerServiceDbImplementation implements SellerService {
     private SellerRepository sellerRepository;
 
     @Autowired
-    private Service_ControllerMapper service_controllerMapper;
+    private Domain_ModelMapper service_controllerMapper;
 
     @Autowired
-    private Repository_ServicesMapper repository_serviceMapper;
+    private Domain_EntityMapper repository_serviceMapper;
 
 
     public String saveSeller(SellerModel sellerModel) {

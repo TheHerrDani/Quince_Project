@@ -14,10 +14,14 @@ import java.util.stream.Collectors;
 @Component
 public class Repository_ServiceMapperImplementation {
 
-    @Autowired
+
     private ProductRepository productRepository;
-    @Autowired
     private SellerRepository sellerRepository;
+
+    public Repository_ServiceMapperImplementation(ProductRepository productRepository, SellerRepository sellerRepository) {
+        this.productRepository = productRepository;
+        this.sellerRepository = sellerRepository;
+    }
 
     public Product productDomainToProduct(ProductDomain productDomain) {
         Product product = productRepository.findById(productDomain.getProductId()).get();

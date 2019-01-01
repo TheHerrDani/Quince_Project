@@ -1,13 +1,11 @@
 package marketPlace.services;
 
 import marketPlace.controller.model.ProductModel;
-import marketPlace.environment.mapper.Repository_ServicesMapper;
-import marketPlace.environment.mapper.Service_ControllerMapper;
+import marketPlace.environment.mapper.Domain_EntityMapper;
+import marketPlace.environment.mapper.Domain_ModelMapper;
 import marketPlace.repository.Product;
 import marketPlace.repository.ProductRepository;
-import marketPlace.repository.SellerRepository;
 import marketPlace.services.domain.ProductDomain;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,17 +15,17 @@ import java.util.stream.Collectors;
 @Service
 public class ProductServiceDbImplementation implements ProductService {
 
-    @Autowired
     private ProductRepository productRepository;
 
-    @Autowired
-    private SellerRepository sellerRepository;
+    private Domain_ModelMapper service_controllerMapper;
 
-    @Autowired
-    private Service_ControllerMapper service_controllerMapper;
+    private Domain_EntityMapper repository_serviceMapper;
 
-    @Autowired
-    private Repository_ServicesMapper repository_serviceMapper;
+    public ProductServiceDbImplementation(ProductRepository productRepository, Domain_ModelMapper service_controllerMapper, Domain_EntityMapper repository_serviceMapper) {
+        this.productRepository = productRepository;
+        this.service_controllerMapper = service_controllerMapper;
+        this.repository_serviceMapper = repository_serviceMapper;
+    }
 
     public String saveProduct(ProductModel productModel) {
         ProductDomain productDomain = service_controllerMapper.productModelToProductDomain(productModel);

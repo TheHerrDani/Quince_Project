@@ -30,22 +30,28 @@ public class SellerContoller {
         return sellerServices.addRating(sellerId, rating);
     }
 
-    @GetMapping(path = "/Get")
+    @PostMapping(path = "/Get")
     public @ResponseBody
     SellerModel getSellerById(@RequestParam int Id) {
         return sellerServices.getSellerById(Id);
     }
 
-    @GetMapping(path = "/GetAll")
+    @PostMapping(path = "/GetAll")
     public @ResponseBody
     List<SellerModel> getAllSellers() {
         return sellerServices.getAllSellers();
     }
 
-    @GetMapping(path = "/GetProductBySeller")
+    @PostMapping(path = "/GetProductBySeller")
     public @ResponseBody
     List<ProductModel> getProductsBySeller(@RequestParam int sellerId) {
         return sellerServices.getProductsBySeller(sellerId);
+    }
+
+    @PostMapping(path = "/Modify")
+    public @ResponseBody
+    SellerModel modifySellerById(@RequestParam int Id) {
+        return sellerServices.getSellerById(Id);
     }
 
     @DeleteMapping(path = "/Delete")

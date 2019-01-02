@@ -48,6 +48,7 @@ public class SellerMapperImplementation implements SellerMapper {
         sellerDomain.setLastName(seller.getLastName());
         sellerDomain.setEmail(seller.getEmail());
         sellerDomain.addManyProducts(seller.getProducts().stream().map(productMapper::productToProductDomain).collect(Collectors.toList()));
+        sellerDomain.addManyRatings(seller.getRatings());
         return sellerDomain;
     }
 

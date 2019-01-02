@@ -82,7 +82,8 @@ public class Seller {
         return new ArrayList<>(ratings);
     }
 
-    public void addRatings(Integer rating) {
+    public Seller addRatings(Integer rating) {
         this.ratings.add(rating);
+        return this;
     }
 }

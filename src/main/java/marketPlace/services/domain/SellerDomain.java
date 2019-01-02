@@ -14,7 +14,7 @@ public class SellerDomain {
 
     private String lastName;
 
-    private List<ProductDomain> products = new CopyOnWriteArrayList<>();
+    private List<ProductDomain> products = new ArrayList<>();
 
     private String email;
 
@@ -61,11 +61,14 @@ public class SellerDomain {
     }
 
     public List<Integer> getRatings() {
-        return new ArrayList<>();
+        return new ArrayList<>(ratings);
     }
 
     public void addRatings(Integer rating) {
         this.ratings.add(rating);
     }
 
+    public void addManyRatings(List<Integer> ratings) {
+        this.ratings.addAll(ratings);
+    }
 }

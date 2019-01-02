@@ -12,9 +12,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -72,7 +72,9 @@ public class SellerServiceDbImplementation implements SellerService {
 
     @Override
     public String addRating(int sellerId, int rating) {
-        sellerRepository.findById(sellerId).get().addRatings(rating);
+        ratingValidator(sellerId,rating);
+        Seller seller = sellerRepository.findById(sellerId).get().addRatings(rating);
+        sellerRepository.save(seller);
         return "Rating added successfully.";
     }
     // Helper Methods and Attributes
@@ -83,12 +85,20 @@ public class SellerServiceDbImplementation implements SellerService {
         return sellerModel;
     };
 
-
     public boolean existingSeller(int sellerId) {
-        return this.getAllSellers().stream().noneMatch(sellerModel -> sellerModel.getSellerId() == sellerId);
+        return sellerRepository.existsById(sellerId);
+    }
+
+    public void ratingValidator(int sellerId, int rating) {
+        if (!existingSeller(sellerId)) {
+            throw new IllegalArgumentException("rating must be in the scale of 1-5");
+        } else if (rating < 0 || rating > 5) {
+            throw new IllegalArgumentException("There is none seller with this sellerId");
+        }
     }
 
     private double averageRatings(SellerDomain sellerDomain) {
-        return sellerDomain.getRatings().stream().mapToInt(Integer::intValue).average().getAsDouble();
+        IntSummaryStatistics intSummaryStatistics = sellerDomain.getRatings().stream().collect(Collectors.summarizingInt(Integer::intValue));
+        return intSummaryStatistics.getAverage();
     }
 }

@@ -6,6 +6,7 @@ import marketPlace.environment.mapper.ProductMapper;
 import marketPlace.environment.mapper.SellerMapper;
 import marketPlace.repository.Entity.Seller;
 import marketPlace.repository.SellerRepository;
+import marketPlace.services.domain.ProductDomain;
 import marketPlace.services.domain.SellerDomain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -26,6 +28,7 @@ public class SellerServiceDbImplementation implements SellerService {
     private ProductMapper productMapper;
 
     private SellerMapper sellerMapper;
+
 
     @Autowired
     public SellerServiceDbImplementation(SellerRepository sellerRepository, ProductMapper productMapper, SellerMapper sellerMapper) {
@@ -52,9 +55,7 @@ public class SellerServiceDbImplementation implements SellerService {
 
     @Override
     public List<SellerModel> getAllSellers() {
-        Iterable<Seller> iterableSellers = sellerRepository.findAll();
-        List<SellerDomain> sellerDomains = new ArrayList<>();
-        iterableSellers.forEach(seller -> sellerDomains.add(sellerMapper.sellerToSellerDomain(seller)));
+        List<SellerDomain> sellerDomains = getAllSellerDomain();
         return sellerDomains.stream().map(sellerModelMapper).collect(Collectors.toList());
     }
 
@@ -76,7 +77,7 @@ public class SellerServiceDbImplementation implements SellerService {
 
     @Override
     public String addRating(int sellerId, int rating) {
-        ratingValidator(sellerId,rating);
+        ratingValidator(sellerId, rating);
         Seller seller = sellerRepository.findById(sellerId).get().addRatings(rating);
         sellerRepository.save(seller);
         return "Rating added successfully.";
@@ -106,6 +107,28 @@ public class SellerServiceDbImplementation implements SellerService {
         return String.format("Successful modified product with %s id ", sellerId);
     }
 
+    @Override
+    public List<SellerModel> getSellersWithSalesData() {
+
+        List<SellerDomain> allSellerDomain = getAllSellerDomain();
+        for (SellerDomain sellerDomain : allSellerDomain) {
+            List<ProductDomain> productDomains = sellerDomain.getProducts();
+            productDomains.forEach(productDomain -> productDomain.setSalesValue(productDomain.getNumberOfSales() * productDomain.getPrice()));
+        }
+        return allSellerDomain.stream().map(sellerModelMapper).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SellerModel> orderingProductsBySalesData(boolean ascending) {
+        return null;
+    }
+
+    @Override
+    public List<SellerModel> top5Seller() {
+        return null;
+    }
+
+
     // Helper Methods and Attributes
 
     private Function<SellerDomain, SellerModel> sellerModelMapper = (sellerDomain) -> {
@@ -130,4 +153,13 @@ public class SellerServiceDbImplementation implements SellerService {
         IntSummaryStatistics intSummaryStatistics = sellerDomain.getRatings().stream().collect(Collectors.summarizingInt(Integer::intValue));
         return intSummaryStatistics.getAverage();
     }
+
+    private List<SellerDomain> getAllSellerDomain() {
+        Iterable<Seller> iterableSellers = sellerRepository.findAll();
+        List<SellerDomain> sellerDomains = new ArrayList<>();
+        iterableSellers.forEach(seller -> sellerDomains.add(sellerMapper.sellerToSellerDomain(seller)));
+        return sellerDomains;
+    }
+
+
 }

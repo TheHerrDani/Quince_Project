@@ -59,4 +59,26 @@ public class SellerContoller {
     String deleteSellerById(@RequestParam int sellerId) {
         return sellerServices.deleteSeller(sellerId);
     }
+
+    @PostMapping(path = "/GetSellersWithSalesData")
+    public @ResponseBody
+    List<SellerModel> getSellersWithSalesData(
+    ){
+        return sellerServices.getSellersWithSalesData();
+    }
+
+    @PostMapping(path = "/OrderingSellersByAveragingRating")
+    public @ResponseBody
+    List<SellerModel> orderingProductsBySalesData(@RequestParam(defaultValue = "true") boolean ascending
+    ){
+        return sellerServices.orderingProductsBySalesData(ascending);
+    }
+
+    @PostMapping(path = "/Top5Seller")
+    public @ResponseBody
+    List<SellerModel> top5Seller(
+    ){
+        return sellerServices.top5Seller();
+    }
+
 }

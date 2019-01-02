@@ -19,4 +19,10 @@ public interface SellerService {
     String addRating(int sellerId, int rating);
 
     String modifySellerById(int sellerId, SellerModel sellerModel);
+
+    List<SellerModel> getSellersWithSalesData();
+
+    List<SellerModel> orderingProductsBySalesData(boolean ascending);
+
+    List<SellerModel> top5Seller();
 }

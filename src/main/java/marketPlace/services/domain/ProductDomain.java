@@ -4,10 +4,10 @@ import marketPlace.repository.Entity.ProductCategory;
 import marketPlace.repository.Entity.Seller;
 import org.springframework.stereotype.Component;
 
-import java.util.concurrent.atomic.AtomicInteger;
+
 
 @Component
-public class ProductDomain {
+public class ProductDomain implements Comparable<ProductDomain> {
 
     private Integer productId;
 
@@ -107,5 +107,10 @@ public class ProductDomain {
 
     public void setSalesValue(double salesValue) {
         this.salesValue = salesValue;
+    }
+
+    @Override
+    public int compareTo(ProductDomain otherProductDomain) {
+        return this.getStock()-otherProductDomain.getStock();
     }
 }

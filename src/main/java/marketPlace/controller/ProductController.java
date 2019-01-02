@@ -59,9 +59,9 @@ public class ProductController {
 
     @PostMapping(path = "/OrderingProductsBySalesData")
     public @ResponseBody
-    List<ProductModel> orderingProductsBySalesData(
+    List<ProductModel> orderingProductsBySalesData(@RequestParam(defaultValue = "true") boolean ascending
     ){
-        return productService.orderingProductsBySalesData();
+        return productService.orderingProductsBySalesData(ascending);
     }
 
     @PostMapping(path = "/MostViewedProducts")

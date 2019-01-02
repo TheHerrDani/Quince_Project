@@ -10,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Synchronization;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -115,26 +115,36 @@ public class ProductServiceDbImplementation implements ProductService {
     @Override
     public List<ProductModel> getProductsWithSalesData() {
         List<ProductDomain> products = getAllProductDomain();
-        products.stream().forEach(productDomain -> productDomain.setSalesValue(productDomain.getPrice() * productDomain.getNumberOfSales()));
+        getSalesData(products);
         return listOfProductDomainToListOfProductModel(products);
     }
 
     @Override
-    public List<ProductModel> orderingProductsBySalesData() {
-        return null;
+    public List<ProductModel> orderingProductsBySalesData(boolean ascending) {
+        List<ProductDomain> products = getAllProductDomain();
+        if (ascending) {
+            products.sort(ProductDomain::compareTo);
+        } else {
+            products.sort(Collections.reverseOrder(ProductDomain::compareTo));
+        }
+        return listOfProductDomainToListOfProductModel(products);
     }
 
     @Override
     public List<ProductModel> mostViewedProducts() {
-        return null;
+        List<ProductDomain> products = getAllProductDomain();
+        products.sort(Collections.reverseOrder(comperatorByViews));
+        products = products.stream().limit(5).collect(Collectors.toList());
+        return listOfProductDomainToListOfProductModel(products);
     }
 
     @Override
     public Map<ProductCategory, Integer> salesByCategory() {
-        return null;
+        List<ProductDomain> products = getAllProductDomain();
+        return products.stream().collect(Collectors.groupingBy((ProductDomain::getCategory), TreeMap::new, Collectors.reducing(0,summarize,(integer, integer2) -> integer+integer2)));
     }
 
-    // Helper methods
+    // Helper methods, Interfaces
     private List<ProductDomain> getAllProductDomain() {
         Iterable<Product> iterableProducts = productRepository.findAll();
         List<ProductDomain> products = new ArrayList<>();
@@ -142,8 +152,8 @@ public class ProductServiceDbImplementation implements ProductService {
         return products;
     }
 
-    private List<ProductModel> listOfProductDomainToListOfProductModel(List<ProductDomain> products){
-       return products.stream().map(productDomain -> productMapper.productDomainToProductModel(productDomain)).collect(Collectors.toList());
+    private List<ProductModel> listOfProductDomainToListOfProductModel(List<ProductDomain> products) {
+        return products.stream().map(productDomain -> productMapper.productDomainToProductModel(productDomain)).collect(Collectors.toList());
     }
 
     private void viewProduct(Product product) {
@@ -152,7 +162,23 @@ public class ProductServiceDbImplementation implements ProductService {
         productRepository.save(product);
     }
 
+    private List<ProductDomain> getSalesData(List<ProductDomain> products) {
+        products.forEach(productDomain -> productDomain.setSalesValue(productDomain.getPrice() * productDomain.getNumberOfSales()));
+        return products;
+    }
+
     public boolean productIsNotExist(int productId) {
         return !productRepository.existsById(productId);
     }
+
+    private Comparator<ProductDomain> comperatorByViews = (ProductDomain productDomain, ProductDomain otherProductDomain) -> {
+        if (productDomain.getNumberOfViewed() > otherProductDomain.getNumberOfViewed()) {
+            return 1;
+        } else if (productDomain.getNumberOfViewed() == otherProductDomain.getNumberOfViewed()) {
+            return 0;
+        } else {
+            return -1;
+        }
+    };
+    private Function<ProductDomain,Integer> summarize = ProductDomain::getNumberOfSales;
 }

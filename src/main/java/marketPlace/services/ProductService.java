@@ -22,7 +22,7 @@ public interface ProductService {
 
     List<ProductModel> getProductsWithSalesData();
 
-    List<ProductModel> orderingProductsBySalesData();
+    List<ProductModel> orderingProductsBySalesData(boolean ascending);
 
     List<ProductModel> mostViewedProducts();
 

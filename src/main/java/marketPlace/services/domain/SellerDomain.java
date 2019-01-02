@@ -18,6 +18,8 @@ public class SellerDomain {
 
     private String email;
 
+    private List<Integer> ratings = new CopyOnWriteArrayList<>();
+
     public Integer getSellerId() {
         return sellerId;
     }
@@ -57,4 +59,13 @@ public class SellerDomain {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public List<Integer> getRatings() {
+        return new ArrayList<>();
+    }
+
+    public void addRatings(Integer rating) {
+        this.ratings.add(rating);
+    }
+
 }

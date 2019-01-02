@@ -7,7 +7,11 @@ import marketPlace.repository.ProductRepository;
 import marketPlace.repository.SellerRepository;
 import marketPlace.services.domain.ProductDomain;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
+@Component
 public class ProductMapperImplementation implements ProductMapper {
 
     private ProductRepository productRepository;
@@ -24,17 +28,6 @@ public class ProductMapperImplementation implements ProductMapper {
     }
 
     public Product productDomainToProduct(ProductDomain productDomain) {
-        Product product = productRepository.findById(productDomain.getProductId()).get();
-        product.setCategory(productDomain.getCategory());
-        product.setDescription(productDomain.getDescription());
-        product.setName(productDomain.getName());
-        product.setPrice(productDomain.getPrice());
-        product.setStock(productDomain.getStock());
-        product.setSellerId(productDomain.getSeller().getSellerId());
-        return product;
-    }
-
-    public Product productDomainToNewProduct(ProductDomain productDomain) {
         Product product = new Product();
         product.setCategory(productDomain.getCategory());
         product.setDescription(productDomain.getDescription());
@@ -55,6 +48,8 @@ public class ProductMapperImplementation implements ProductMapper {
         productDomain.setPrice(product.getPrice());
         productDomain.setStock(product.getStock());
         productDomain.setSeller(sellerRepository.findById(product.getSellerId()).get());
+        productDomain.setNumberOfSales(product.getNumberOfSales());
+        productDomain.setNumberOfViewed(product.getNumberOfViewed());
         return productDomain;
     }
 
@@ -67,6 +62,8 @@ public class ProductMapperImplementation implements ProductMapper {
         productModel.setPrice(productDomain.getPrice());
         productModel.setStock(productDomain.getStock());
         productModel.setSellerId(productDomain.getSeller().getSellerId());
+        productModel.setNumberOfSales(productDomain.getNumberOfSales());
+        productModel.setNumberOfViewed(productDomain.getNumberOfViewed());
         return productModel;
     }
 
@@ -77,8 +74,8 @@ public class ProductMapperImplementation implements ProductMapper {
         productDomain.setName(productModel.getName());
         productDomain.setPrice(productModel.getPrice());
         productDomain.setStock(productModel.getStock());
-        if (productModel.getSellerId() > 0 && validator.existingSeller(productModel.getSellerId()))
-            productDomain.setSeller(sellerRepository.findById(productModel.getSellerId()).get());
+        productDomain.setSeller(sellerRepository.findById(productModel.getSellerId()).get());
         return productDomain;
     }
+
 }

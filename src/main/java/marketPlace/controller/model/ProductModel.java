@@ -1,8 +1,9 @@
 package marketPlace.controller.model;
 
-import marketPlace.repository.ProductCategory;
-import org.springframework.data.annotation.ReadOnlyProperty;
+import marketPlace.repository.Entity.ProductCategory;
 import org.springframework.stereotype.Component;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 public class ProductModel {
@@ -19,6 +20,10 @@ public class ProductModel {
     private int sellerId;
 
     private int stock;
+
+    private int numberOfSales;
+
+    private int numberOfViewed;
 
     public void setProductId(Integer productId) {
         this.productId = productId;
@@ -74,6 +79,22 @@ public class ProductModel {
 
     public void setStock(int stock) {
         this.stock = stock;
+    }
+
+    public int getNumberOfSales() {
+        return numberOfSales;
+    }
+
+    public void setNumberOfSales(int numberOfSales) {
+        this.numberOfSales = numberOfSales;
+    }
+
+    public int getNumberOfViewed() {
+        return numberOfViewed;
+    }
+
+    public void setNumberOfViewed(int numberOfViewed) {
+        this.numberOfViewed = numberOfViewed;
     }
 
     @Override

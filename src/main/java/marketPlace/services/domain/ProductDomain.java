@@ -1,8 +1,10 @@
 package marketPlace.services.domain;
 
-import marketPlace.repository.ProductCategory;
+import marketPlace.repository.Entity.ProductCategory;
 import marketPlace.repository.Entity.Seller;
 import org.springframework.stereotype.Component;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 public class ProductDomain {
@@ -20,6 +22,10 @@ public class ProductDomain {
     private Seller seller;
 
     private int stock;
+
+    private int numberOfSales;
+
+    private int numberOfViewed;
 
     public void setProductId(Integer productId) {
         this.productId = productId;
@@ -75,5 +81,21 @@ public class ProductDomain {
 
     public void setStock(int stock) {
         this.stock = stock;
+    }
+
+    public int getNumberOfSales() {
+        return numberOfSales;
+    }
+
+    public void setNumberOfSales(int numberOfSales) {
+        this.numberOfSales = numberOfSales;
+    }
+
+    public int getNumberOfViewed() {
+        return numberOfViewed;
+    }
+
+    public void setNumberOfViewed(int numberOfViewed) {
+        this.numberOfViewed = numberOfViewed;
     }
 }

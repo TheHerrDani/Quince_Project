@@ -18,6 +18,8 @@ public class SellerModel {
 
     private String email;
 
+    private double averageRatings;
+
     public Integer getSellerId() {
         return sellerId;
     }
@@ -56,5 +58,13 @@ public class SellerModel {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public double getAverageRatings() {
+        return averageRatings;
+    }
+
+    public void setAverageRatings(double averageRatings) {
+        this.averageRatings = averageRatings;
     }
 }

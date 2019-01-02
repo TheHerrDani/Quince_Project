@@ -2,7 +2,6 @@ package marketPlace.services;
 
 import marketPlace.controller.model.ProductModel;
 import marketPlace.environment.mapper.ProductMapper;
-import marketPlace.environment.mapper.SellerMapper;
 import marketPlace.repository.Entity.Product;
 import marketPlace.repository.ProductRepository;
 import marketPlace.services.domain.ProductDomain;
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,20 +20,29 @@ public class ProductServiceDbImplementation implements ProductService {
 
     private ProductMapper productMapper;
 
+    private SellerServiceDbImplementation sellerServiceDbImplementation;
+
     @Autowired
-    public ProductServiceDbImplementation(ProductRepository productRepository, ProductMapper productMapper) {
+    public ProductServiceDbImplementation(ProductRepository productRepository, ProductMapper productMapper, SellerServiceDbImplementation sellerServiceDbImplementation) {
         this.productRepository = productRepository;
         this.productMapper = productMapper;
+        this.sellerServiceDbImplementation = sellerServiceDbImplementation;
     }
 
     public String saveProduct(ProductModel productModel) {
+        if (sellerServiceDbImplementation.existingSeller(productModel.getSellerId()))
+            throw new IllegalArgumentException("There is none seller with this sellerId");
+
         ProductDomain productDomain = productMapper.productModelToProductDomain(productModel);
-        productRepository.save(productMapper.productDomainToNewProduct(productDomain));
+        productDomain.setNumberOfSales(0);
+        productDomain.setNumberOfViewed(0);
+        productRepository.save(productMapper.productDomainToProduct(productDomain));
         return "Saved Product Successfully";
     }
 
     public ProductModel getProductById(int productId) {
         Product starter = productRepository.findById(productId).get();
+        viewProduct(starter);
         ProductDomain productDomain = productMapper.productToProductDomain(starter);
         return productMapper.productDomainToProductModel(productDomain);
     }
@@ -54,7 +63,14 @@ public class ProductServiceDbImplementation implements ProductService {
 
     @Override
     public String modifyProduct(int productId, ProductModel productModel) {
-        ProductDomain oldDomain = productMapper.productToProductDomain(productRepository.findById(productId).get());
+        if (sellerServiceDbImplementation.existingSeller(productModel.getSellerId()))
+            throw new IllegalArgumentException("There is none seller with this sellerId");
+
+        Product starterProduct = productRepository.findById(productId).get();
+        viewProduct(starterProduct);
+
+        ProductDomain oldDomain = productMapper.productToProductDomain(starterProduct);
+
         ProductDomain newDomain = productMapper.productModelToProductDomain(productModel);
 
         if (newDomain.getName() != null && !newDomain.getName().equals(oldDomain.getName()))
@@ -77,5 +93,11 @@ public class ProductServiceDbImplementation implements ProductService {
 
         productRepository.save(productMapper.productDomainToProduct(oldDomain));
         return String.format("Successful modified product with %s id ", productId);
+    }
+
+    private void viewProduct(Product product){
+        int newValue = product.getNumberOfViewed() + 1;
+        product.setNumberOfViewed(newValue);
+        productRepository.save(product);
     }
 }

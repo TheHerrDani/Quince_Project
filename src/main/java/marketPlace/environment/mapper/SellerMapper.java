@@ -3,11 +3,11 @@ package marketPlace.environment.mapper;
 import marketPlace.controller.model.SellerModel;
 import marketPlace.repository.Entity.Seller;
 import marketPlace.services.domain.SellerDomain;
+import org.springframework.stereotype.Component;
 
+@Component
 public interface SellerMapper {
     Seller sellerDomainToSeller(SellerDomain sellerDomain);
-
-    Seller sellerDomainToNewSeller(SellerDomain sellerDomain);
 
     SellerDomain sellerToSellerDomain(Seller seller);
 

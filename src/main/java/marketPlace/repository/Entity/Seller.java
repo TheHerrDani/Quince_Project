@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-@Entity // This tells Hibernate to make a table out of this class
+@Entity
 public class Seller {
 
     @Id
@@ -29,6 +29,14 @@ public class Seller {
 
     @Email
     private String email;
+
+    @ElementCollection
+    @CollectionTable(
+            name="RATING",
+            joinColumns=@JoinColumn(name="sellerId")
+    )
+    @Column(name="Rating")
+    private List<Integer> ratings;
 
     public Integer getSellerId() {
         return sellerId;
@@ -70,7 +78,11 @@ public class Seller {
         this.products.addAll(products);
     }
 
-    public boolean deleteProducts(int id) {
-        return products.removeIf((p) -> p.getProductId() == id);
+    public List<Integer> getRatings() {
+        return new ArrayList<>(ratings);
+    }
+
+    public void addRatings(Integer rating) {
+        this.ratings.add(rating);
     }
 }

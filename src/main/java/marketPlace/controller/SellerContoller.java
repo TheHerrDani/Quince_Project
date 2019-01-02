@@ -24,6 +24,12 @@ public class SellerContoller {
         return sellerServices.saveSeller(sellermodel);
     }
 
+    @PostMapping(path = "/AddRating")
+    public @ResponseBody
+    String addRating(@RequestParam int sellerId, @RequestParam int rating) {
+        return sellerServices.addRating(sellerId, rating);
+    }
+
     @GetMapping(path = "/Get")
     public @ResponseBody
     SellerModel getSellerById(@RequestParam int Id) {
@@ -44,7 +50,7 @@ public class SellerContoller {
 
     @DeleteMapping(path = "/Delete")
     public @ResponseBody
-    String deleteSellerById(@RequestParam int id) {
-        return sellerServices.deleteSeller(id);
+    String deleteSellerById(@RequestParam int sellerId) {
+        return sellerServices.deleteSeller(sellerId);
     }
 }

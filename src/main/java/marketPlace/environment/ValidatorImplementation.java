@@ -10,13 +10,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class ValidatorImplementation implements ClassValidator {
 
-    SellerService sellerService;
-
-    @Autowired
-    public ValidatorImplementation(SellerService sellerService) {
-        this.sellerService = sellerService;
-    }
-
     @Override
     public void productValidator(Product product) {
         if (product.getName() == null) {
@@ -41,7 +34,4 @@ public class ValidatorImplementation implements ClassValidator {
         }
     }
 
-    public boolean existingSeller(int sellerId){
-       return sellerService.getAllSellers().stream().anyMatch(sellerModel -> sellerModel.getSellerId() == sellerId);
-    }
 }

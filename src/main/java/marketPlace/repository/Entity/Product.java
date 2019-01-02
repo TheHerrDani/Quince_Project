@@ -1,16 +1,12 @@
 package marketPlace.repository.Entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.internal.NotNull;
-import marketPlace.repository.ProductCategory;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.data.annotation.ReadOnlyProperty;
-import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 
-@Entity // This tells Hibernate to make a table out of this class
+@Entity
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -34,6 +30,12 @@ public class Product {
 
     @NotNull
     private int stock;
+
+    @NotNull
+    private int numberOfSales;
+
+    @NotNull
+    private int numberOfViewed;
 
     public Integer getProductId() {
         return productId;
@@ -85,5 +87,25 @@ public class Product {
 
     public void setSellerId(int sellerId) {
         this.sellerId = sellerId;
+    }
+
+    public void setProductId(Integer productId) {
+        this.productId = productId;
+    }
+
+    public int getNumberOfSales() {
+        return numberOfSales;
+    }
+
+    public void setNumberOfSales(int numberOfSales) {
+        this.numberOfSales = numberOfSales;
+    }
+
+    public int getNumberOfViewed() {
+        return numberOfViewed;
+    }
+
+    public void setNumberOfViewed(int numberOfViewed) {
+        this.numberOfViewed = numberOfViewed;
     }
 }

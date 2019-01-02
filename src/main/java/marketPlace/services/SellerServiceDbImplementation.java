@@ -2,8 +2,8 @@ package marketPlace.services;
 
 import marketPlace.controller.model.ProductModel;
 import marketPlace.controller.model.SellerModel;
-import marketPlace.environment.mapper.Domain_EntityMapper;
-import marketPlace.environment.mapper.Domain_ModelMapper;
+import marketPlace.environment.mapper.ProductMapper;
+import marketPlace.environment.mapper.SellerMapper;
 import marketPlace.repository.Entity.Seller;
 import marketPlace.repository.ProductRepository;
 import marketPlace.repository.SellerRepository;
@@ -21,40 +21,37 @@ import java.util.stream.Collectors;
 @ComponentScan(basePackages = "marketPlace.environment")
 public class SellerServiceDbImplementation implements SellerService {
 
-    private ProductRepository productRepository;
-
     private SellerRepository sellerRepository;
 
-    private Domain_ModelMapper domain_modelMapper;
+    private ProductMapper productMapper;
 
-    private Domain_EntityMapper domain_entityMapper;
+    private SellerMapper sellerMapper;
 
     @Autowired
-    public SellerServiceDbImplementation(ProductRepository productRepository, SellerRepository sellerRepository, Domain_ModelMapper domain_modelMapper, Domain_EntityMapper domain_entityMapper) {
-        this.productRepository = productRepository;
+    public SellerServiceDbImplementation( SellerRepository sellerRepository, ProductMapper productMapper, SellerMapper sellerMapper) {
         this.sellerRepository = sellerRepository;
-        this.domain_modelMapper = domain_modelMapper;
-        this.domain_entityMapper = domain_entityMapper;
+        this.productMapper = productMapper;
+        this.sellerMapper = sellerMapper;
     }
 
 
     public String saveSeller(SellerModel sellerModel) {
-        SellerDomain sellerDomain = domain_modelMapper.sellerModelToSellerDomain(sellerModel);
-        sellerRepository.save(domain_entityMapper.sellerDomainToNewSeller(sellerDomain));
+        SellerDomain sellerDomain = sellerMapper.sellerModelToSellerDomain(sellerModel);
+        sellerRepository.save(sellerMapper.sellerDomainToNewSeller(sellerDomain));
         return "Saved Seller Successfully";
     }
 
     public SellerModel getSellerById(int sellerId) {
-        SellerDomain sellerDomain = domain_entityMapper.sellerToSellerDomain(sellerRepository.findById(sellerId).get());
-        return domain_modelMapper.sellerDomainToSellerModel(sellerDomain);
+        SellerDomain sellerDomain = sellerMapper.sellerToSellerDomain(sellerRepository.findById(sellerId).get());
+        return sellerMapper.sellerDomainToSellerModel(sellerDomain);
     }
 
     @Override
     public List<SellerModel> getAllSellers() {
         Iterable<Seller> iterableSellers = sellerRepository.findAll();
         List<SellerDomain> sellerDomains = new ArrayList<>();
-        iterableSellers.forEach(seller -> sellerDomains.add(domain_entityMapper.sellerToSellerDomain(seller)));
-        return sellerDomains.stream().map(sellerDomain -> domain_modelMapper.sellerDomainToSellerModel(sellerDomain)).collect(Collectors.toList());
+        iterableSellers.forEach(seller -> sellerDomains.add(sellerMapper.sellerToSellerDomain(seller)));
+        return sellerDomains.stream().map(sellerDomain -> sellerMapper.sellerDomainToSellerModel(sellerDomain)).collect(Collectors.toList());
     }
 
     @Override
@@ -65,7 +62,7 @@ public class SellerServiceDbImplementation implements SellerService {
 
     @Override
     public List<ProductModel> getProductsBySeller(int sellerId) {
-        SellerDomain sellerDomain = domain_entityMapper.sellerToSellerDomain(sellerRepository.findById(sellerId).get());
-        return sellerDomain.getProducts().stream().map(productDomain -> domain_modelMapper.productDomainToProductModel(productDomain)).collect(Collectors.toList());
+        SellerDomain sellerDomain = sellerMapper.sellerToSellerDomain(sellerRepository.findById(sellerId).get());
+        return sellerDomain.getProducts().stream().map(productDomain -> productMapper.productDomainToProductModel(productDomain)).collect(Collectors.toList());
     }
 }

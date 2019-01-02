@@ -1,19 +1,14 @@
 package marketPlace.environment.mapper;
 
+import marketPlace.controller.model.ProductModel;
 import marketPlace.environment.ClassValidator;
 import marketPlace.repository.Entity.Product;
-import marketPlace.repository.Entity.Seller;
 import marketPlace.repository.ProductRepository;
 import marketPlace.repository.SellerRepository;
 import marketPlace.services.domain.ProductDomain;
-import marketPlace.services.domain.SellerDomain;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-import java.util.stream.Collectors;
-
-@Component
-public class DomainEntityMapperImplementation implements Domain_EntityMapper {
+public class ProductMapperImplementation implements ProductMapper {
 
     private ProductRepository productRepository;
 
@@ -22,7 +17,7 @@ public class DomainEntityMapperImplementation implements Domain_EntityMapper {
     private ClassValidator validator;
 
     @Autowired
-    public DomainEntityMapperImplementation(ProductRepository productRepository, SellerRepository sellerRepository, ClassValidator validator) {
+    public ProductMapperImplementation(ProductRepository productRepository, SellerRepository sellerRepository, ClassValidator validator) {
         this.productRepository = productRepository;
         this.sellerRepository = sellerRepository;
         this.validator = validator;
@@ -63,32 +58,27 @@ public class DomainEntityMapperImplementation implements Domain_EntityMapper {
         return productDomain;
     }
 
-    public Seller sellerDomainToSeller(SellerDomain sellerDomain) {
-        Seller seller = sellerRepository.findById(sellerDomain.getSellerId()).get();
-        seller.setFirstName(sellerDomain.getFirstName());
-        seller.setLastName(sellerDomain.getLastName());
-        seller.setEmail(sellerDomain.getEmail());
-        seller.addManyProducts(sellerDomain.getProducts().stream().map(this::productDomainToProduct).collect(Collectors.toList()));
-        return seller;
+    public ProductModel productDomainToProductModel(ProductDomain productDomain) {
+        ProductModel productModel = new ProductModel();
+        productModel.setProductId(productDomain.getProductId());
+        productModel.setCategory(productDomain.getCategory());
+        productModel.setDescription(productDomain.getDescription());
+        productModel.setName(productDomain.getName());
+        productModel.setPrice(productDomain.getPrice());
+        productModel.setStock(productDomain.getStock());
+        productModel.setSellerId(productDomain.getSeller().getSellerId());
+        return productModel;
     }
 
-    public Seller sellerDomainToNewSeller(SellerDomain sellerDomain) {
-        Seller seller = new Seller();
-        seller.setFirstName(sellerDomain.getFirstName());
-        seller.setLastName(sellerDomain.getLastName());
-        seller.setEmail(sellerDomain.getEmail());
-        seller.addManyProducts(sellerDomain.getProducts().stream().map(this::productDomainToProduct).collect(Collectors.toList()));
-        validator.sellerValidator(seller);
-        return seller;
-    }
-
-    public SellerDomain sellerToSellerDomain(Seller seller) {
-        SellerDomain sellerDomain = new SellerDomain();
-        sellerDomain.setSellerId(seller.getSellerId());
-        sellerDomain.setFirstName(seller.getFirstName());
-        sellerDomain.setLastName(seller.getLastName());
-        sellerDomain.setEmail(seller.getEmail());
-        sellerDomain.addManyProducts(seller.getProducts().stream().map(this::productToProductDomain).collect(Collectors.toList()));
-        return sellerDomain;
+    public ProductDomain productModelToProductDomain(ProductModel productModel) {
+        ProductDomain productDomain = new ProductDomain();
+        productDomain.setCategory(productModel.getCategory());
+        productDomain.setDescription(productModel.getDescription());
+        productDomain.setName(productModel.getName());
+        productDomain.setPrice(productModel.getPrice());
+        productDomain.setStock(productModel.getStock());
+        if (productModel.getSellerId() > 0 && validator.existingSeller(productModel.getSellerId()))
+            productDomain.setSeller(sellerRepository.findById(productModel.getSellerId()).get());
+        return productDomain;
     }
 }

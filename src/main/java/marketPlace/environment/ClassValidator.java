@@ -9,4 +9,6 @@ public interface ClassValidator {
     void productValidator(Product product);
 
     void sellerValidator(Seller seller);
+
+    boolean existingSeller(int sellerId);
 }

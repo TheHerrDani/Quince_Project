@@ -1,7 +1,6 @@
 package marketPlace.controller;
 
 import marketPlace.controller.model.ProductModel;
-import marketPlace.repository.ProductCategory;
 import marketPlace.services.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

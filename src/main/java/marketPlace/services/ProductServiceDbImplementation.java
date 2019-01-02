@@ -1,19 +1,14 @@
 package marketPlace.services;
 
 import marketPlace.controller.model.ProductModel;
-import marketPlace.environment.mapper.DomainEntityMapperImplementation;
-import marketPlace.environment.mapper.Domain_EntityMapper;
-import marketPlace.environment.mapper.Domain_ModelMapper;
+import marketPlace.environment.mapper.ProductMapper;
+import marketPlace.environment.mapper.SellerMapper;
 import marketPlace.repository.Entity.Product;
-import marketPlace.repository.Entity.Seller;
-import marketPlace.repository.ProductCategory;
 import marketPlace.repository.ProductRepository;
-import marketPlace.repository.SellerRepository;
 import marketPlace.services.domain.ProductDomain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,36 +18,32 @@ public class ProductServiceDbImplementation implements ProductService {
 
     private ProductRepository productRepository;
 
-
-    private Domain_ModelMapper domain_modelMapper;
-
-    private Domain_EntityMapper domain_entityMapper;
+    private ProductMapper productMapper;
 
     @Autowired
-    public ProductServiceDbImplementation(ProductRepository productRepository, Domain_ModelMapper domain_modelMapper, Domain_EntityMapper domain_entityMapper) {
+    public ProductServiceDbImplementation(ProductRepository productRepository, ProductMapper productMapper) {
         this.productRepository = productRepository;
-        this.domain_modelMapper = domain_modelMapper;
-        this.domain_entityMapper = domain_entityMapper;
+        this.productMapper = productMapper;
     }
 
     public String saveProduct(ProductModel productModel) {
-        ProductDomain productDomain = domain_modelMapper.productModelToProductDomain(productModel);
-        productRepository.save(domain_entityMapper.productDomainToNewProduct(productDomain));
+        ProductDomain productDomain = productMapper.productModelToProductDomain(productModel);
+        productRepository.save(productMapper.productDomainToNewProduct(productDomain));
         return "Saved Product Successfully";
     }
 
     public ProductModel getProductById(int productId) {
         Product starter = productRepository.findById(productId).get();
-        ProductDomain productDomain = domain_entityMapper.productToProductDomain(starter);
-        return domain_modelMapper.productDomainToProductModel(productDomain);
+        ProductDomain productDomain = productMapper.productToProductDomain(starter);
+        return productMapper.productDomainToProductModel(productDomain);
     }
 
     @Override
     public List<ProductModel> getAllProducts() {
         Iterable<Product> iterableProducts = productRepository.findAll();
         List<ProductDomain> products = new ArrayList<>();
-        iterableProducts.forEach((product) -> products.add(domain_entityMapper.productToProductDomain(product)));
-        return products.stream().map(productDomain -> domain_modelMapper.productDomainToProductModel(productDomain)).collect(Collectors.toList());
+        iterableProducts.forEach((product) -> products.add(productMapper.productToProductDomain(product)));
+        return products.stream().map(productDomain -> productMapper.productDomainToProductModel(productDomain)).collect(Collectors.toList());
     }
 
     @Override
@@ -63,8 +54,8 @@ public class ProductServiceDbImplementation implements ProductService {
 
     @Override
     public String modifyProduct(int productId, ProductModel productModel) {
-        ProductDomain oldDomain = domain_entityMapper.productToProductDomain(productRepository.findById(productId).get());
-        ProductDomain newDomain = domain_modelMapper.productModelToProductDomain(productModel);
+        ProductDomain oldDomain = productMapper.productToProductDomain(productRepository.findById(productId).get());
+        ProductDomain newDomain = productMapper.productModelToProductDomain(productModel);
 
         if (newDomain.getName() != null && !newDomain.getName().equals(oldDomain.getName()))
             oldDomain.setName(newDomain.getName());
@@ -84,7 +75,7 @@ public class ProductServiceDbImplementation implements ProductService {
         if (newDomain.getSeller() != null && !newDomain.getSeller().equals(oldDomain.getSeller()))
             oldDomain.setSeller(newDomain.getSeller());
 
-        productRepository.save(domain_entityMapper.productDomainToProduct(oldDomain));
+        productRepository.save(productMapper.productDomainToProduct(oldDomain));
         return String.format("Successful modified product with %s id ", productId);
     }
 }

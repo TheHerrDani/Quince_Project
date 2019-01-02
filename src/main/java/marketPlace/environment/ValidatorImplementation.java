@@ -2,10 +2,21 @@ package marketPlace.environment;
 
 import marketPlace.repository.Entity.Product;
 import marketPlace.repository.Entity.Seller;
+import marketPlace.services.ProductService;
+import marketPlace.services.SellerService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ValidatorImplementation implements ClassValidator {
+
+    SellerService sellerService;
+
+    @Autowired
+    public ValidatorImplementation(SellerService sellerService) {
+        this.sellerService = sellerService;
+    }
+
     @Override
     public void productValidator(Product product) {
         if (product.getName() == null) {
@@ -28,5 +39,9 @@ public class ValidatorImplementation implements ClassValidator {
         } else if (seller.getEmail() == null){
             throw new IllegalArgumentException("The seller's Email is required!");
         }
+    }
+
+    public boolean existingSeller(int sellerId){
+       return sellerService.getAllSellers().stream().anyMatch(sellerModel -> sellerModel.getSellerId() == sellerId);
     }
 }

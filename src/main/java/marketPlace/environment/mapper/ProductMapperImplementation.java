@@ -3,11 +3,14 @@ package marketPlace.environment.mapper;
 import marketPlace.controller.model.ProductModel;
 import marketPlace.environment.ClassValidator;
 import marketPlace.repository.Entity.Product;
+import marketPlace.repository.Entity.Seller;
 import marketPlace.repository.ProductRepository;
 import marketPlace.repository.SellerRepository;
 import marketPlace.services.domain.ProductDomain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @Component
 public class ProductMapperImplementation implements ProductMapper {
@@ -72,7 +75,8 @@ public class ProductMapperImplementation implements ProductMapper {
         productDomain.setName(productModel.getName());
         productDomain.setPrice(productModel.getPrice());
         productDomain.setStock(productModel.getStock());
-        productDomain.setSeller(sellerRepository.findById(productModel.getSellerId()).get());
+        Optional<Seller> seller = sellerRepository.findById(productModel.getSellerId());
+        seller.ifPresent(productDomain::setSeller);
         return productDomain;
     }
 

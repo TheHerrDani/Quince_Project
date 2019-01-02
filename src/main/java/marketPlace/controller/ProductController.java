@@ -48,5 +48,11 @@ public class ProductController {
         return productService.modifyProduct(productId,productModel);
     }
 
+    @PostMapping(path = "/Buying")
+    public @ResponseBody
+    String buyingProductById(@RequestParam int productId, @RequestParam int amount
+    ){
+        return productService.buyingProductById(productId, amount);
+    }
 
 }

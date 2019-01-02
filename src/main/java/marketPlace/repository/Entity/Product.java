@@ -93,8 +93,12 @@ public class Product {
         return numberOfSales;
     }
 
-    public void setNumberOfSales(int numberOfSales) {
-        this.numberOfSales = numberOfSales;
+    public void addNumberOfSales(int amount) {
+        this.numberOfSales += amount;
+    }
+
+    public void decreaseStock(int amount) {
+        this.stock -= amount;
     }
 
     public int getNumberOfViewed() {

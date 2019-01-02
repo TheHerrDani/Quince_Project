@@ -15,4 +15,6 @@ public interface ProductService {
     List<ProductModel> getAllProducts();
 
     String modifyProduct(int productId, ProductModel productModel);
+
+    String buyingProductById(int productId, int amount);
 }

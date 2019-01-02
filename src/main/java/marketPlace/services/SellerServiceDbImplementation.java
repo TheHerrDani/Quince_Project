@@ -42,7 +42,7 @@ public class SellerServiceDbImplementation implements SellerService {
     }
 
     public SellerModel getSellerById(int sellerId) {
-        if (!existingSeller(sellerId))
+        if (sellerIsNotExist(sellerId))
             throw new IllegalArgumentException("There is none seller with this sellerId");
         SellerDomain sellerDomain = sellerMapper.sellerToSellerDomain(sellerRepository.findById(sellerId).get());
         SellerModel result = sellerMapper.sellerDomainToSellerModel(sellerDomain);
@@ -60,7 +60,7 @@ public class SellerServiceDbImplementation implements SellerService {
 
     @Override
     public String deleteSeller(int sellerId) {
-        if (!existingSeller(sellerId))
+        if (sellerIsNotExist(sellerId))
             throw new IllegalArgumentException("There is none seller with this sellerId");
         sellerRepository.deleteById(sellerId);
         return "Successful delete";
@@ -68,7 +68,7 @@ public class SellerServiceDbImplementation implements SellerService {
 
     @Override
     public List<ProductModel> getProductsBySeller(int sellerId) {
-        if (!existingSeller(sellerId))
+        if (sellerIsNotExist(sellerId))
             throw new IllegalArgumentException("There is none seller with this sellerId");
         SellerDomain sellerDomain = sellerMapper.sellerToSellerDomain(sellerRepository.findById(sellerId).get());
         return sellerDomain.getProducts().stream().map(productDomain -> productMapper.productDomainToProductModel(productDomain)).collect(Collectors.toList());
@@ -84,7 +84,7 @@ public class SellerServiceDbImplementation implements SellerService {
 
     @Override
     public String modifySellerById(int sellerId, SellerModel sellerModel) {
-        if (!existingSeller(sellerId))
+        if (sellerIsNotExist(sellerId))
             throw new IllegalArgumentException("There is none seller with this sellerId");
 
         Seller starterSeller = sellerRepository.findById(sellerId).get();
@@ -114,13 +114,12 @@ public class SellerServiceDbImplementation implements SellerService {
         return sellerModel;
     };
 
-    public boolean existingSeller(int sellerId) {
-        boolean test = sellerRepository.existsById(sellerId);
-        return test;
+    public boolean sellerIsNotExist(int sellerId) {
+        return !sellerRepository.existsById(sellerId);
     }
 
     public void ratingValidator(int sellerId, int rating) {
-        if (!existingSeller(sellerId)) {
+        if (sellerIsNotExist(sellerId)) {
             throw new IllegalArgumentException("rating must be in the scale of 1-5");
         } else if (rating < 0 || rating > 5) {
             throw new IllegalArgumentException("There is none seller with this sellerId");

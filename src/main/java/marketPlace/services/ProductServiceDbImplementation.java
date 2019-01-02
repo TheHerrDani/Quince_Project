@@ -66,22 +66,22 @@ public class ProductServiceDbImplementation implements ProductService {
         ProductDomain oldDomain = domain_entityMapper.productToProductDomain(productRepository.findById(productId).get());
         ProductDomain newDomain = domain_modelMapper.productModelToProductDomain(productModel);
 
-        if (!newDomain.getName().equals(oldDomain.getName()))
+        if (newDomain.getName() != null && !newDomain.getName().equals(oldDomain.getName()))
             oldDomain.setName(newDomain.getName());
 
-        if (!newDomain.getDescription().equals(oldDomain.getDescription()))
+        if (newDomain.getDescription() != null && !newDomain.getDescription().equals(oldDomain.getDescription()))
             oldDomain.setDescription(newDomain.getDescription());
 
-        if (newDomain.getPrice() != oldDomain.getPrice())
+        if (newDomain.getPrice() < 0 && newDomain.getPrice() != oldDomain.getPrice())
             oldDomain.setPrice(newDomain.getPrice());
 
-        if (newDomain.getStock() != oldDomain.getStock())
+        if (newDomain.getStock() < 0 && newDomain.getStock() != oldDomain.getStock())
             oldDomain.setStock(newDomain.getStock());
 
-        if (!newDomain.getCategory().equals(oldDomain.getCategory()))
+        if (newDomain.getCategory() != null && !newDomain.getCategory().equals(oldDomain.getCategory()))
             oldDomain.setCategory(newDomain.getCategory());
 
-        if (!newDomain.getSeller().equals(oldDomain.getSeller()))
+        if (newDomain.getSeller() != null && !newDomain.getSeller().equals(oldDomain.getSeller()))
             oldDomain.setSeller(newDomain.getSeller());
 
         productRepository.save(domain_entityMapper.productDomainToProduct(oldDomain));

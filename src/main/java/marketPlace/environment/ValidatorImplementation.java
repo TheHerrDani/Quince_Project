@@ -2,9 +2,10 @@ package marketPlace.environment;
 
 import marketPlace.repository.Entity.Product;
 import marketPlace.repository.Entity.Seller;
+import org.springframework.stereotype.Service;
 
-
-public class ValidatorImplementation implements Validator {
+@Service
+public class ValidatorImplementation implements ClassValidator {
     @Override
     public void productValidator(Product product) {
         if (product.getName() == null) {

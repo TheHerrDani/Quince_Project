@@ -39,7 +39,8 @@ public class DomainModelMapperImplementation implements Domain_ModelMapper {
         productDomain.setName(productModel.getName());
         productDomain.setPrice(productModel.getPrice());
         productDomain.setStock(productModel.getStock());
-        productDomain.setSeller(sellerRepository.findById(productModel.getSellerId()).get());
+        if (productModel.getSellerId() > 0)
+            productDomain.setSeller(sellerRepository.findById(productModel.getSellerId()).get());
         return productDomain;
     }
 

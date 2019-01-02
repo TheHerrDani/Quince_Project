@@ -1,6 +1,6 @@
 package marketPlace.environment.mapper;
 
-import marketPlace.environment.Validator;
+import marketPlace.environment.ClassValidator;
 import marketPlace.repository.Entity.Product;
 import marketPlace.repository.Entity.Seller;
 import marketPlace.repository.ProductRepository;
@@ -19,10 +19,10 @@ public class DomainEntityMapperImplementation implements Domain_EntityMapper {
 
     private SellerRepository sellerRepository;
 
-    private Validator validator;
+    private ClassValidator validator;
 
     @Autowired
-    public DomainEntityMapperImplementation(ProductRepository productRepository, SellerRepository sellerRepository, Validator validator) {
+    public DomainEntityMapperImplementation(ProductRepository productRepository, SellerRepository sellerRepository, ClassValidator validator) {
         this.productRepository = productRepository;
         this.sellerRepository = sellerRepository;
         this.validator = validator;

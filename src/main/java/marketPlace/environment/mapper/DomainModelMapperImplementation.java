@@ -2,7 +2,6 @@ package marketPlace.environment.mapper;
 
 import marketPlace.controller.model.ProductModel;
 import marketPlace.controller.model.SellerModel;
-import marketPlace.repository.ProductRepository;
 import marketPlace.repository.SellerRepository;
 import marketPlace.services.domain.ProductDomain;
 import marketPlace.services.domain.SellerDomain;
@@ -14,13 +13,10 @@ import java.util.stream.Collectors;
 @Service
 public class DomainModelMapperImplementation implements Domain_ModelMapper {
 
-    private ProductRepository productRepository;
-
     private SellerRepository sellerRepository;
 
     @Autowired
-    public DomainModelMapperImplementation(ProductRepository productRepository, SellerRepository sellerRepository) {
-        this.productRepository = productRepository;
+    public DomainModelMapperImplementation(SellerRepository sellerRepository) {
         this.sellerRepository = sellerRepository;
     }
 

@@ -1,6 +1,8 @@
 package marketPlace.repository.Entity;
 
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.util.ArrayList;
@@ -14,8 +16,10 @@ public class Seller {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer sellerId;
 
+    @Length(min=1)
     private String firstName;
 
+    @Length(min=1)
     private String lastName;
 
     @OneToMany(cascade = CascadeType.ALL,

@@ -13,4 +13,6 @@ public interface ProductService {
     ProductModel getProductById(int productId);
 
     List<ProductModel> getAllProducts();
+
+    String modifyProduct(int productId, ProductModel productModel);
 }

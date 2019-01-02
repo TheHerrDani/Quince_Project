@@ -1,5 +1,6 @@
 package marketPlace.environment.mapper;
 
+import marketPlace.environment.Validator;
 import marketPlace.repository.Entity.Product;
 import marketPlace.repository.Entity.Seller;
 import marketPlace.repository.ProductRepository;
@@ -18,10 +19,13 @@ public class DomainEntityMapperImplementation implements Domain_EntityMapper {
 
     private SellerRepository sellerRepository;
 
+    private Validator validator;
+
     @Autowired
-    public DomainEntityMapperImplementation(ProductRepository productRepository, SellerRepository sellerRepository) {
+    public DomainEntityMapperImplementation(ProductRepository productRepository, SellerRepository sellerRepository, Validator validator) {
         this.productRepository = productRepository;
         this.sellerRepository = sellerRepository;
+        this.validator = validator;
     }
 
     public Product productDomainToProduct(ProductDomain productDomain) {
@@ -43,6 +47,7 @@ public class DomainEntityMapperImplementation implements Domain_EntityMapper {
         product.setPrice(productDomain.getPrice());
         product.setStock(productDomain.getStock());
         product.setSellerId(productDomain.getSeller().getSellerId());
+        validator.productValidator(product);
         return product;
     }
 
@@ -73,6 +78,7 @@ public class DomainEntityMapperImplementation implements Domain_EntityMapper {
         seller.setLastName(sellerDomain.getLastName());
         seller.setEmail(sellerDomain.getEmail());
         seller.addManyProducts(sellerDomain.getProducts().stream().map(this::productDomainToProduct).collect(Collectors.toList()));
+        validator.sellerValidator(seller);
         return seller;
     }
 

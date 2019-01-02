@@ -1,6 +1,7 @@
 package marketPlace.controller.model;
 
 import marketPlace.repository.ProductCategory;
+import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -73,5 +74,18 @@ public class ProductModel {
 
     public void setStock(int stock) {
         this.stock = stock;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductModel{" +
+                "productId=" + productId +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", category=" + category +
+                ", sellerId=" + sellerId +
+                ", stock=" + stock +
+                '}';
     }
 }

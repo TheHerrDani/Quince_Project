@@ -1,7 +1,12 @@
 package marketPlace.repository.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sun.istack.internal.NotNull;
 import marketPlace.repository.ProductCategory;
+import org.hibernate.validator.constraints.Length;
+import org.springframework.data.annotation.ReadOnlyProperty;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 
@@ -11,16 +16,23 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer productId;
 
+    @NotNull
+    @Length(min = 1)
     private String name;
 
+    @Nullable
     private String description;
 
+    @NotNull
     private double price;
 
+    @Nullable
     private ProductCategory category;
 
+    @NotNull
     private int sellerId;
 
+    @NotNull
     private int stock;
 
     public Integer getProductId() {

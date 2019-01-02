@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping(path = "/SellerDomain")
+@RequestMapping(path = "/Seller")
 public class SellerContoller {
 
     private SellerService sellerServices;

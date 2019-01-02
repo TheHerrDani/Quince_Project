@@ -1,14 +1,16 @@
 package marketPlace.controller;
 
 import marketPlace.controller.model.ProductModel;
+import marketPlace.repository.ProductCategory;
 import marketPlace.services.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
-@RequestMapping(path = "/ProductDomain")
+@RequestMapping(path = "/Product")
 public class ProductController {
 
     private ProductService productService;
@@ -22,13 +24,13 @@ public class ProductController {
         return productService.saveProduct(productModel);
     }
 
-    @GetMapping(path = "/Get")
+    @PostMapping(path = "/Get")
     public @ResponseBody
     ProductModel getProductById(@RequestParam int productId) {
         return productService.getProductById(productId);
     }
 
-    @GetMapping(path = "/GetAll")
+    @PostMapping(path = "/GetAll")
     public @ResponseBody
     List<ProductModel> getAllProducts() {
         return productService.getAllProducts();
@@ -36,7 +38,16 @@ public class ProductController {
 
     @DeleteMapping(path = "/Delete")
     public @ResponseBody
-    String deleteProductById(@RequestParam int id) {
-        return productService.deleteProduct(id);
+    String deleteProductById(@RequestParam int productid) {
+        return productService.deleteProduct(productid);
     }
+
+    @PostMapping(path = "/Modify")
+    public @ResponseBody
+    String modifyById(@RequestParam int productId,@RequestBody ProductModel productModel
+    ){
+        return productService.modifyProduct(productId,productModel);
+    }
+
+
 }

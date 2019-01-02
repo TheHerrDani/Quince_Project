@@ -37,11 +37,13 @@ public class SellerServiceDbImplementation implements SellerService {
 
     public String saveSeller(SellerModel sellerModel) {
         SellerDomain sellerDomain = sellerMapper.sellerModelToSellerDomain(sellerModel);
-        sellerRepository.save(sellerMapper.sellerDomainToSeller(sellerDomain));
+        sellerRepository.save(sellerMapper.sellerDomainTonewSeller(sellerDomain));
         return "Saved Seller Successfully";
     }
 
     public SellerModel getSellerById(int sellerId) {
+        if (!existingSeller(sellerId))
+            throw new IllegalArgumentException("There is none seller with this sellerId");
         SellerDomain sellerDomain = sellerMapper.sellerToSellerDomain(sellerRepository.findById(sellerId).get());
         SellerModel result = sellerMapper.sellerDomainToSellerModel(sellerDomain);
         result.setAverageRatings(averageRatings(sellerDomain));
@@ -58,13 +60,15 @@ public class SellerServiceDbImplementation implements SellerService {
 
     @Override
     public String deleteSeller(int sellerId) {
+        if (!existingSeller(sellerId))
+            throw new IllegalArgumentException("There is none seller with this sellerId");
         sellerRepository.deleteById(sellerId);
         return "Successful delete";
     }
 
     @Override
     public List<ProductModel> getProductsBySeller(int sellerId) {
-        if (existingSeller(sellerId))
+        if (!existingSeller(sellerId))
             throw new IllegalArgumentException("There is none seller with this sellerId");
         SellerDomain sellerDomain = sellerMapper.sellerToSellerDomain(sellerRepository.findById(sellerId).get());
         return sellerDomain.getProducts().stream().map(productDomain -> productMapper.productDomainToProductModel(productDomain)).collect(Collectors.toList());
@@ -77,6 +81,31 @@ public class SellerServiceDbImplementation implements SellerService {
         sellerRepository.save(seller);
         return "Rating added successfully.";
     }
+
+    @Override
+    public String modifySellerById(int sellerId, SellerModel sellerModel) {
+        if (!existingSeller(sellerId))
+            throw new IllegalArgumentException("There is none seller with this sellerId");
+
+        Seller starterSeller = sellerRepository.findById(sellerId).get();
+
+        SellerDomain oldSellerDomain = sellerMapper.sellerToSellerDomain(starterSeller);
+
+        SellerDomain newSellerDomain = sellerMapper.sellerModelToSellerDomain(sellerModel);
+
+        if (newSellerDomain.getFirstName() != null && !newSellerDomain.getFirstName().equals(oldSellerDomain.getFirstName()))
+            oldSellerDomain.setFirstName(newSellerDomain.getFirstName());
+
+        if (newSellerDomain.getLastName() != null && !newSellerDomain.getLastName().equals(oldSellerDomain.getLastName()))
+            oldSellerDomain.setLastName(newSellerDomain.getLastName());
+
+        if (newSellerDomain.getEmail() != null && !newSellerDomain.getEmail().equals(oldSellerDomain.getEmail()))
+            oldSellerDomain.setEmail(newSellerDomain.getEmail());
+
+        sellerRepository.save(sellerMapper.sellerDomainToSeller(oldSellerDomain));
+        return String.format("Successful modified product with %s id ", sellerId);
+    }
+
     // Helper Methods and Attributes
 
     private Function<SellerDomain, SellerModel> sellerModelMapper = (sellerDomain) -> {
@@ -86,7 +115,8 @@ public class SellerServiceDbImplementation implements SellerService {
     };
 
     public boolean existingSeller(int sellerId) {
-        return sellerRepository.existsById(sellerId);
+        boolean test = sellerRepository.existsById(sellerId);
+        return test;
     }
 
     public void ratingValidator(int sellerId, int rating) {

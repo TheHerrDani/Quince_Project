@@ -17,4 +17,6 @@ public interface SellerService {
     List<ProductModel> getProductsBySeller(int sellerId);
 
     String addRating(int sellerId, int rating);
+
+    String modifySellerById(int sellerId, SellerModel sellerModel);
 }

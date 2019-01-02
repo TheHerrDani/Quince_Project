@@ -32,8 +32,8 @@ public class SellerContoller {
 
     @PostMapping(path = "/Get")
     public @ResponseBody
-    SellerModel getSellerById(@RequestParam int Id) {
-        return sellerServices.getSellerById(Id);
+    SellerModel getSellerById(@RequestParam int sellerId) {
+        return sellerServices.getSellerById(sellerId);
     }
 
     @PostMapping(path = "/GetAll")
@@ -50,8 +50,8 @@ public class SellerContoller {
 
     @PostMapping(path = "/Modify")
     public @ResponseBody
-    SellerModel modifySellerById(@RequestParam int Id) {
-        return sellerServices.getSellerById(Id);
+    String modifySellerById(@RequestParam int sellerId,@RequestBody SellerModel sellerModel) {
+        return sellerServices.modifySellerById(sellerId,sellerModel);
     }
 
     @DeleteMapping(path = "/Delete")

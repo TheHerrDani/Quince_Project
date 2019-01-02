@@ -9,8 +9,6 @@ import marketPlace.services.domain.ProductDomain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 @Component
 public class ProductMapperImplementation implements ProductMapper {
 
@@ -28,13 +26,13 @@ public class ProductMapperImplementation implements ProductMapper {
     }
 
     public Product productDomainToProduct(ProductDomain productDomain) {
+        Product product = productRepository.findById(productDomain.getProductId()).get();
+        return copyProductAttributesToProduct(product, productDomain);
+    }
+
+    public Product productDomainToNewProduct(ProductDomain productDomain) {
         Product product = new Product();
-        product.setCategory(productDomain.getCategory());
-        product.setDescription(productDomain.getDescription());
-        product.setName(productDomain.getName());
-        product.setPrice(productDomain.getPrice());
-        product.setStock(productDomain.getStock());
-        product.setSellerId(productDomain.getSeller().getSellerId());
+        copyProductAttributesToProduct(product, productDomain);
         validator.productValidator(product);
         return product;
     }
@@ -76,6 +74,16 @@ public class ProductMapperImplementation implements ProductMapper {
         productDomain.setStock(productModel.getStock());
         productDomain.setSeller(sellerRepository.findById(productModel.getSellerId()).get());
         return productDomain;
+    }
+
+    private Product copyProductAttributesToProduct(Product product, ProductDomain productDomain) {
+        product.setCategory(productDomain.getCategory());
+        product.setDescription(productDomain.getDescription());
+        product.setName(productDomain.getName());
+        product.setPrice(productDomain.getPrice());
+        product.setStock(productDomain.getStock());
+        product.setSellerId(productDomain.getSeller().getSellerId());
+        return product;
     }
 
 }

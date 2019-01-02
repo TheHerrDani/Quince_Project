@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 public interface SellerMapper {
     Seller sellerDomainToSeller(SellerDomain sellerDomain);
 
+    Seller sellerDomainTonewSeller(SellerDomain sellerDomain);
+
     SellerDomain sellerToSellerDomain(Seller seller);
 
     SellerModel sellerDomainToSellerModel(SellerDomain sellerDomain);

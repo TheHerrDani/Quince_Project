@@ -30,13 +30,13 @@ public class ProductServiceDbImplementation implements ProductService {
     }
 
     public String saveProduct(ProductModel productModel) {
-        if (sellerServiceDbImplementation.existingSeller(productModel.getSellerId()))
+        if (!sellerServiceDbImplementation.existingSeller(productModel.getSellerId()))
             throw new IllegalArgumentException("There is none seller with this sellerId");
 
         ProductDomain productDomain = productMapper.productModelToProductDomain(productModel);
         productDomain.setNumberOfSales(0);
         productDomain.setNumberOfViewed(0);
-        productRepository.save(productMapper.productDomainToProduct(productDomain));
+        productRepository.save(productMapper.productDomainToNewProduct(productDomain));
         return "Saved Product Successfully";
     }
 
@@ -63,35 +63,35 @@ public class ProductServiceDbImplementation implements ProductService {
 
     @Override
     public String modifyProduct(int productId, ProductModel productModel) {
-        if (sellerServiceDbImplementation.existingSeller(productModel.getSellerId()))
+        if (!sellerServiceDbImplementation.existingSeller(productModel.getSellerId()))
             throw new IllegalArgumentException("There is none seller with this sellerId");
 
         Product starterProduct = productRepository.findById(productId).get();
         viewProduct(starterProduct);
 
-        ProductDomain oldDomain = productMapper.productToProductDomain(starterProduct);
+        ProductDomain oldProductDomain = productMapper.productToProductDomain(starterProduct);
 
-        ProductDomain newDomain = productMapper.productModelToProductDomain(productModel);
+        ProductDomain newProductDomain = productMapper.productModelToProductDomain(productModel);
 
-        if (newDomain.getName() != null && !newDomain.getName().equals(oldDomain.getName()))
-            oldDomain.setName(newDomain.getName());
+        if (newProductDomain.getName() != null && !newProductDomain.getName().equals(oldProductDomain.getName()))
+            oldProductDomain.setName(newProductDomain.getName());
 
-        if (newDomain.getDescription() != null && !newDomain.getDescription().equals(oldDomain.getDescription()))
-            oldDomain.setDescription(newDomain.getDescription());
+        if (newProductDomain.getDescription() != null && !newProductDomain.getDescription().equals(oldProductDomain.getDescription()))
+            oldProductDomain.setDescription(newProductDomain.getDescription());
 
-        if (newDomain.getPrice() < 0 && newDomain.getPrice() != oldDomain.getPrice())
-            oldDomain.setPrice(newDomain.getPrice());
+        if (newProductDomain.getPrice() < 0 && newProductDomain.getPrice() != oldProductDomain.getPrice())
+            oldProductDomain.setPrice(newProductDomain.getPrice());
 
-        if (newDomain.getStock() < 0 && newDomain.getStock() != oldDomain.getStock())
-            oldDomain.setStock(newDomain.getStock());
+        if (newProductDomain.getStock() < 0 && newProductDomain.getStock() != oldProductDomain.getStock())
+            oldProductDomain.setStock(newProductDomain.getStock());
 
-        if (newDomain.getCategory() != null && !newDomain.getCategory().equals(oldDomain.getCategory()))
-            oldDomain.setCategory(newDomain.getCategory());
+        if (newProductDomain.getCategory() != null && !newProductDomain.getCategory().equals(oldProductDomain.getCategory()))
+            oldProductDomain.setCategory(newProductDomain.getCategory());
 
-        if (newDomain.getSeller() != null && !newDomain.getSeller().equals(oldDomain.getSeller()))
-            oldDomain.setSeller(newDomain.getSeller());
+        if (newProductDomain.getSeller() != null && !newProductDomain.getSeller().equals(oldProductDomain.getSeller()))
+            oldProductDomain.setSeller(newProductDomain.getSeller());
 
-        productRepository.save(productMapper.productDomainToProduct(oldDomain));
+        productRepository.save(productMapper.productDomainToProduct(oldProductDomain));
         return String.format("Successful modified product with %s id ", productId);
     }
 

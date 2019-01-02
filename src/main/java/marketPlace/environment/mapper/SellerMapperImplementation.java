@@ -8,6 +8,7 @@ import marketPlace.repository.SellerRepository;
 import marketPlace.services.domain.SellerDomain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import java.util.stream.Collectors;
 
 @Component
@@ -30,14 +31,17 @@ public class SellerMapperImplementation implements SellerMapper {
     }
 
     @Override
-    public Seller sellerDomainToSeller(SellerDomain sellerDomain) {
+    public Seller sellerDomainTonewSeller(SellerDomain sellerDomain) {
         Seller seller = new Seller();
-        seller.setFirstName(sellerDomain.getFirstName());
-        seller.setLastName(sellerDomain.getLastName());
-        seller.setEmail(sellerDomain.getEmail());
-        seller.addManyProducts(sellerDomain.getProducts().stream().map(productMapper::productDomainToProduct).collect(Collectors.toList()));
+        copySellerAttributesToSeller(seller, sellerDomain);
         validator.sellerValidator(seller);
         return seller;
+    }
+
+    @Override
+    public Seller sellerDomainToSeller(SellerDomain sellerDomain) {
+        Seller seller = sellerRepository.findById(sellerDomain.getSellerId()).get();
+        return copySellerAttributesToSeller(seller, sellerDomain);
     }
 
     @Override
@@ -71,5 +75,15 @@ public class SellerMapperImplementation implements SellerMapper {
         sellerDomain.setEmail(sellerModel.getEmail());
         return sellerDomain;
     }
+
+
+    private Seller copySellerAttributesToSeller(Seller seller, SellerDomain sellerDomain) {
+        seller.setFirstName(sellerDomain.getFirstName());
+        seller.setLastName(sellerDomain.getLastName());
+        seller.setEmail(sellerDomain.getEmail());
+        seller.addManyProducts(sellerDomain.getProducts().stream().map(productMapper::productDomainToProduct).collect(Collectors.toList()));
+        return seller;
+    }
+
 
 }

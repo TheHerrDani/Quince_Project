@@ -89,10 +89,6 @@ public class Product {
         this.sellerId = sellerId;
     }
 
-    public void setProductId(Integer productId) {
-        this.productId = productId;
-    }
-
     public int getNumberOfSales() {
         return numberOfSales;
     }

@@ -25,6 +25,8 @@ public class ProductModel {
 
     private int numberOfViewed;
 
+    private double salesValue;
+
     public void setProductId(Integer productId) {
         this.productId = productId;
     }
@@ -97,16 +99,11 @@ public class ProductModel {
         this.numberOfViewed = numberOfViewed;
     }
 
-    @Override
-    public String toString() {
-        return "ProductModel{" +
-                "productId=" + productId +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", price=" + price +
-                ", category=" + category +
-                ", sellerId=" + sellerId +
-                ", stock=" + stock +
-                '}';
+    public double getSalesValue() {
+        return salesValue;
+    }
+
+    public void setSalesValue(double salesValue) {
+        this.salesValue = salesValue;
     }
 }

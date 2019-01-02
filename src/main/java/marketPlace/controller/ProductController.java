@@ -1,12 +1,14 @@
 package marketPlace.controller;
 
 import marketPlace.controller.model.ProductModel;
+import marketPlace.repository.Entity.ProductCategory;
 import marketPlace.services.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping(path = "/Product")
@@ -46,6 +48,34 @@ public class ProductController {
     String modifyById(@RequestParam int productId,@RequestBody ProductModel productModel
     ){
         return productService.modifyProduct(productId,productModel);
+    }
+
+    @PostMapping(path = "/GetProductsWithSalesData")
+    public @ResponseBody
+    List<ProductModel> getProductsWithSalesData(
+    ){
+        return productService.getProductsWithSalesData();
+    }
+
+    @PostMapping(path = "/OrderingProductsBySalesData")
+    public @ResponseBody
+    List<ProductModel> orderingProductsBySalesData(
+    ){
+        return productService.orderingProductsBySalesData();
+    }
+
+    @PostMapping(path = "/MostViewedProducts")
+    public @ResponseBody
+    List<ProductModel> mostViewedProducts(
+    ){
+        return productService.mostViewedProducts();
+    }
+
+    @PostMapping(path = "/SalesByCategory")
+    public @ResponseBody
+    Map<ProductCategory,Integer> salesByCategory(
+    ){
+        return productService.salesByCategory();
     }
 
     @PostMapping(path = "/Buying")

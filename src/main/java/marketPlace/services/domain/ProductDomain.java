@@ -27,6 +27,8 @@ public class ProductDomain {
 
     private int numberOfViewed;
 
+    private double salesValue;
+
     public void setProductId(Integer productId) {
         this.productId = productId;
     }
@@ -97,5 +99,13 @@ public class ProductDomain {
 
     public void setNumberOfViewed(int numberOfViewed) {
         this.numberOfViewed = numberOfViewed;
+    }
+
+    public double getSalesValue() {
+        return salesValue;
+    }
+
+    public void setSalesValue(double salesValue) {
+        this.salesValue = salesValue;
     }
 }

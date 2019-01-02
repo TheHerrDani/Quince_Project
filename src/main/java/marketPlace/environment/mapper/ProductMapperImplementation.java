@@ -65,6 +65,7 @@ public class ProductMapperImplementation implements ProductMapper {
         productModel.setSellerId(productDomain.getSeller().getSellerId());
         productModel.setNumberOfSales(productDomain.getNumberOfSales());
         productModel.setNumberOfViewed(productDomain.getNumberOfViewed());
+        productModel.setSalesValue(productDomain.getSalesValue());
         return productModel;
     }
 

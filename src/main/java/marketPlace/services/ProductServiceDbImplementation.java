@@ -3,6 +3,7 @@ package marketPlace.services;
 import marketPlace.controller.model.ProductModel;
 import marketPlace.environment.mapper.ProductMapper;
 import marketPlace.repository.Entity.Product;
+import marketPlace.repository.Entity.ProductCategory;
 import marketPlace.repository.ProductRepository;
 import marketPlace.services.domain.ProductDomain;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Synchronization;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -52,10 +54,8 @@ public class ProductServiceDbImplementation implements ProductService {
 
     @Override
     public List<ProductModel> getAllProducts() {
-        Iterable<Product> iterableProducts = productRepository.findAll();
-        List<ProductDomain> products = new ArrayList<>();
-        iterableProducts.forEach((product) -> products.add(productMapper.productToProductDomain(product)));
-        return products.stream().map(productDomain -> productMapper.productDomainToProductModel(productDomain)).collect(Collectors.toList());
+        List<ProductDomain> products = getAllProductDomain();
+        return listOfProductDomainToListOfProductModel(products);
     }
 
     @Override
@@ -112,7 +112,40 @@ public class ProductServiceDbImplementation implements ProductService {
         return "Product was succesfully bougth";
     }
 
+    @Override
+    public List<ProductModel> getProductsWithSalesData() {
+        List<ProductDomain> products = getAllProductDomain();
+        products.stream().forEach(productDomain -> productDomain.setSalesValue(productDomain.getPrice() * productDomain.getNumberOfSales()));
+        return listOfProductDomainToListOfProductModel(products);
+    }
+
+    @Override
+    public List<ProductModel> orderingProductsBySalesData() {
+        return null;
+    }
+
+    @Override
+    public List<ProductModel> mostViewedProducts() {
+        return null;
+    }
+
+    @Override
+    public Map<ProductCategory, Integer> salesByCategory() {
+        return null;
+    }
+
     // Helper methods
+    private List<ProductDomain> getAllProductDomain() {
+        Iterable<Product> iterableProducts = productRepository.findAll();
+        List<ProductDomain> products = new ArrayList<>();
+        iterableProducts.forEach((product) -> products.add(productMapper.productToProductDomain(product)));
+        return products;
+    }
+
+    private List<ProductModel> listOfProductDomainToListOfProductModel(List<ProductDomain> products){
+       return products.stream().map(productDomain -> productMapper.productDomainToProductModel(productDomain)).collect(Collectors.toList());
+    }
+
     private void viewProduct(Product product) {
         int newValue = product.getNumberOfViewed() + 1;
         product.setNumberOfViewed(newValue);

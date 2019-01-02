@@ -1,8 +1,10 @@
 package marketPlace.services;
 
 import marketPlace.controller.model.ProductModel;
+import marketPlace.repository.Entity.ProductCategory;
 
 import java.util.List;
+import java.util.Map;
 
 
 public interface ProductService {
@@ -17,4 +19,12 @@ public interface ProductService {
     String modifyProduct(int productId, ProductModel productModel);
 
     String buyingProductById(int productId, int amount);
+
+    List<ProductModel> getProductsWithSalesData();
+
+    List<ProductModel> orderingProductsBySalesData();
+
+    List<ProductModel> mostViewedProducts();
+
+    Map<ProductCategory, Integer> salesByCategory();
 }

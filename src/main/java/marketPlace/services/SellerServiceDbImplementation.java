@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,13 +37,13 @@ public class SellerServiceDbImplementation implements SellerService {
         this.sellerMapper = sellerMapper;
     }
 
-
+    @Override
     public String saveSeller(SellerModel sellerModel) {
         SellerDomain sellerDomain = sellerMapper.sellerModelToSellerDomain(sellerModel);
         sellerRepository.save(sellerMapper.sellerDomainTonewSeller(sellerDomain));
         return "Saved Seller Successfully";
     }
-
+    @Override
     public SellerModel getSellerById(int sellerId) {
         if (sellerIsNotExist(sellerId))
             throw new IllegalArgumentException("There is none seller with this sellerId");
@@ -120,16 +119,20 @@ public class SellerServiceDbImplementation implements SellerService {
         List<SellerDomain> allSellerDomain = getAllSellerDomain();
         List<SellerModel> sellerModelList = sellerDomainListToSellerModelList(allSellerDomain);
         if (ascending) {
-            sellerModelList.sort(compareByAvrageRating);
+            sellerModelList.sort(compareByAverageRating);
         } else {
-            sellerModelList.sort(Collections.reverseOrder(compareByAvrageRating));
+            sellerModelList.sort(Collections.reverseOrder(compareByAverageRating));
         }
         return sellerModelList;
     }
 
     @Override
     public List<SellerModel> top5Seller() {
-        return null;
+        List<SellerDomain> allSellerDomain = getAllSellerDomain();
+        getSellerDomainWithSalesData(allSellerDomain);
+        List<SellerModel> sellerModelList = sellerDomainListToSellerModelList(allSellerDomain);
+        sellerModelList.sort(Collections.reverseOrder(compareBySaledItemsAmount));
+        return sellerModelList.stream().limit(5).collect(Collectors.toList());
     }
 
 
@@ -183,10 +186,20 @@ public class SellerServiceDbImplementation implements SellerService {
         return sellerDomains;
     }
 
-    private Comparator<SellerModel> compareByAvrageRating = (SellerModel sellerModelFirst, SellerModel sellerModelSecond) -> {
+    private Comparator<SellerModel> compareByAverageRating = (SellerModel sellerModelFirst, SellerModel sellerModelSecond) -> {
         if (sellerModelFirst.getAverageRatings() > sellerModelSecond.getAverageRatings()) {
             return 1;
         } else if (sellerModelFirst.getAverageRatings() == sellerModelSecond.getAverageRatings()) {
+            return 0;
+        } else {
+            return -1;
+        }
+    };
+
+    private Comparator<SellerModel> compareBySaledItemsAmount = (SellerModel sellerModelFirst, SellerModel sellerModelSecond) -> {
+        if (sellerModelFirst.getSellValue() > sellerModelSecond.getSellValue()) {
+            return 1;
+        } else if (sellerModelFirst.getSellValue() == sellerModelSecond.getSellValue()) {
             return 0;
         } else {
             return -1;

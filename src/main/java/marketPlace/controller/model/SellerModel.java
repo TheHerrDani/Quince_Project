@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Component
-public class SellerModel {
+public class SellerModel{
     private Integer sellerId;
 
     private String firstName;
@@ -19,6 +19,10 @@ public class SellerModel {
     private String email;
 
     private double averageRatings;
+
+    private int sellAmount;
+
+    private double sellValue;
 
     public Integer getSellerId() {
         return sellerId;
@@ -66,5 +70,21 @@ public class SellerModel {
 
     public void setAverageRatings(double averageRatings) {
         this.averageRatings = averageRatings;
+    }
+
+    public int getSellAmount() {
+        return sellAmount;
+    }
+
+    public void setSellAmount(int sellAmount) {
+        this.sellAmount = sellAmount;
+    }
+
+    public double getSellValue() {
+        return sellValue;
+    }
+
+    public void setSellValue(double sellValue) {
+        this.sellValue = sellValue;
     }
 }

@@ -5,7 +5,6 @@ import marketPlace.repository.Entity.Seller;
 import org.springframework.stereotype.Component;
 
 
-
 @Component
 public class ProductDomain implements Comparable<ProductDomain> {
 
@@ -111,6 +110,6 @@ public class ProductDomain implements Comparable<ProductDomain> {
 
     @Override
     public int compareTo(ProductDomain otherProductDomain) {
-        return this.getStock()-otherProductDomain.getStock();
+        return this.getStock() - otherProductDomain.getStock();
     }
 }

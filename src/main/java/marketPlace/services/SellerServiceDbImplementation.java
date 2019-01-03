@@ -56,7 +56,7 @@ public class SellerServiceDbImplementation implements SellerService {
     @Override
     public List<SellerModel> getAllSellers() {
         List<SellerDomain> sellerDomains = getAllSellerDomain();
-        return sellerDomains.stream().map(sellerModelMapper).collect(Collectors.toList());
+        return sellerDomainListToSellerModelList(sellerDomains);
     }
 
     @Override
@@ -109,18 +109,21 @@ public class SellerServiceDbImplementation implements SellerService {
 
     @Override
     public List<SellerModel> getSellersWithSalesData() {
-
         List<SellerDomain> allSellerDomain = getAllSellerDomain();
-        for (SellerDomain sellerDomain : allSellerDomain) {
-            List<ProductDomain> productDomains = sellerDomain.getProducts();
-            productDomains.forEach(productDomain -> productDomain.setSalesValue(productDomain.getNumberOfSales() * productDomain.getPrice()));
-        }
-        return allSellerDomain.stream().map(sellerModelMapper).collect(Collectors.toList());
+        getSellerDomainWithSalesData(allSellerDomain);
+        return sellerDomainListToSellerModelList(allSellerDomain);
     }
 
     @Override
     public List<SellerModel> orderingProductsBySalesData(boolean ascending) {
-        return null;
+        List<SellerDomain> allSellerDomain = getAllSellerDomain();
+        List<SellerModel> sellerModelList = sellerDomainListToSellerModelList(allSellerDomain);
+        if(ascending){
+            sellerModelList.sort(compareByAvrageRating);
+        }else{
+            sellerModelList.sort(Collections.reverseOrder(compareByAvrageRating));
+        }
+        return sellerModelList;
     }
 
     @Override
@@ -161,5 +164,32 @@ public class SellerServiceDbImplementation implements SellerService {
         return sellerDomains;
     }
 
+    private List<SellerModel> sellerDomainListToSellerModelList(List<SellerDomain> sellerDomains) {
+        return sellerDomains.stream().map(sellerModelMapper).collect(Collectors.toList());
+    }
+
+    private List<SellerDomain> getSellerDomainWithSalesData(List<SellerDomain> sellerDomains) {
+        Consumer<SellerDomain> getSellerDomainValue = sellerDomain -> {
+            List<ProductDomain> productDomains = sellerDomain.getProducts();
+            productDomains.forEach(productDomain -> {
+                double value = productDomain.getNumberOfSales() * productDomain.getPrice();
+                productDomain.setSalesValue(value);
+                sellerDomain.addSellValue(value);
+                sellerDomain.addSellAmount(productDomain.getNumberOfSales());
+            });
+        };
+        sellerDomains.forEach(getSellerDomainValue);
+        return sellerDomains;
+    }
+
+    private Comparator<SellerModel> compareByAvrageRating = (SellerModel sellerModelFirst, SellerModel sellerModelSecond) -> {
+        if (sellerModelFirst.getAverageRatings() > sellerModelSecond.getAverageRatings()){
+            return 1;
+        }else if (sellerModelFirst.getAverageRatings() == sellerModelSecond.getAverageRatings()){
+            return 0;
+        }else{
+            return -1;
+        }
+    };
 
 }

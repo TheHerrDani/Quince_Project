@@ -20,6 +20,10 @@ public class SellerDomain {
 
     private List<Integer> ratings = new CopyOnWriteArrayList<>();
 
+    private int sellAmount;
+
+    private double sellValue;
+
     public Integer getSellerId() {
         return sellerId;
     }
@@ -70,5 +74,21 @@ public class SellerDomain {
 
     public void addManyRatings(List<Integer> ratings) {
         this.ratings.addAll(ratings);
+    }
+
+    public int getSellAmount() {
+        return sellAmount;
+    }
+
+    public void addSellAmount(int sellAmount) {
+        this.sellAmount += sellAmount;
+    }
+
+    public double getSellValue() {
+        return sellValue;
+    }
+
+    public void addSellValue(double sellValue) {
+        this.sellValue += sellValue;
     }
 }

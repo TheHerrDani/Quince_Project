@@ -2,6 +2,7 @@ package marketPlace.services;
 
 import marketPlace.controller.model.ProductModel;
 import marketPlace.controller.model.SellerModel;
+import marketPlace.environment.MathHelper;
 import marketPlace.environment.mapper.ProductMapper;
 import marketPlace.environment.mapper.SellerMapper;
 import marketPlace.repository.Entity.Seller;
@@ -118,9 +119,9 @@ public class SellerServiceDbImplementation implements SellerService {
     public List<SellerModel> orderingProductsBySalesData(boolean ascending) {
         List<SellerDomain> allSellerDomain = getAllSellerDomain();
         List<SellerModel> sellerModelList = sellerDomainListToSellerModelList(allSellerDomain);
-        if(ascending){
+        if (ascending) {
             sellerModelList.sort(compareByAvrageRating);
-        }else{
+        } else {
             sellerModelList.sort(Collections.reverseOrder(compareByAvrageRating));
         }
         return sellerModelList;
@@ -146,15 +147,15 @@ public class SellerServiceDbImplementation implements SellerService {
 
     public void ratingValidator(int sellerId, int rating) {
         if (sellerIsNotExist(sellerId)) {
-            throw new IllegalArgumentException("rating must be in the scale of 1-5");
-        } else if (rating < 0 || rating > 5) {
             throw new IllegalArgumentException("There is none seller with this sellerId");
+        } else if (rating < 0 || rating > 5) {
+            throw new IllegalArgumentException("rating must be in the scale of 1-5");
         }
     }
 
     private double averageRatings(SellerDomain sellerDomain) {
         IntSummaryStatistics intSummaryStatistics = sellerDomain.getRatings().stream().collect(Collectors.summarizingInt(Integer::intValue));
-        return intSummaryStatistics.getAverage();
+        return MathHelper.round(intSummaryStatistics.getAverage(),3);
     }
 
     private List<SellerDomain> getAllSellerDomain() {
@@ -183,11 +184,11 @@ public class SellerServiceDbImplementation implements SellerService {
     }
 
     private Comparator<SellerModel> compareByAvrageRating = (SellerModel sellerModelFirst, SellerModel sellerModelSecond) -> {
-        if (sellerModelFirst.getAverageRatings() > sellerModelSecond.getAverageRatings()){
+        if (sellerModelFirst.getAverageRatings() > sellerModelSecond.getAverageRatings()) {
             return 1;
-        }else if (sellerModelFirst.getAverageRatings() == sellerModelSecond.getAverageRatings()){
+        } else if (sellerModelFirst.getAverageRatings() == sellerModelSecond.getAverageRatings()) {
             return 0;
-        }else{
+        } else {
             return -1;
         }
     };
